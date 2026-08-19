@@ -11,6 +11,8 @@
 
 <body>
 <form id="form1" runat="server"
+
+
     style="font-family: 'Verdana'; font-style: normal; color: Gray; height: 540px; width: auto;">
 
         <img alt="" src="image/Header.jpg" style="height: 61px; width:1176px" />
@@ -20,7 +22,7 @@
 
 		            <li><a href="./search.aspx">Conversion Search</a></li>
 		            <li><a href="./Serial_Search.aspx">Serial Search</a></li>
-		            <li><a href="./Insert.aspx">Insert Serial &amp; Cap</a></li>
+		            <li><a href="./Insert.aspx">Insert Serial & Cap</a></li>
 
 		            <li><a href="./MoldCap_PCB_Insert.aspx">Insert Mold Cap or PCB Thickness</a></li>
 
@@ -46,14 +48,14 @@
                 <tr>
                     <td colspan="3" style="height: 18px">
                         <asp:Label ID="Label2" runat="server" ForeColor="#0000C0"
-                            Text="Insert Serial &amp; Cap"></asp:Label></td>
+                            Text="Insert Serial & Cap"></asp:Label></td>
                 </tr>
                 <tr>
                     <td style="width: 28px; height: 27px">
                         No.</td>
                     <td style="width: 20px; height: 27px">
                         <asp:TextBox ID="txtNO" runat="server" Width="130px"></asp:TextBox></td>
-                    <td rowspan="6" style="width: 76px">
+                    <td rowspan="3" style="width: 76px">
                         &nbsp;<asp:Button ID="btninput" runat="server" Height="24px"
                         onclick="btninput_Click" Text="�Է�" Width="104px" Font-Size="9pt" /></td>
                 </tr>
@@ -77,27 +79,15 @@
                         <asp:TextBox ID="txtBtmType" runat="server" Width="130px"></asp:TextBox></td>
                 </tr>
                 <tr>
-                    <td style="width: 28px; height: 27px;">
-                        &#51077;&#44256;&#51068;</td>
-                    <td style="width: 20px; height: 27px;">
-                        <input type="date" id="txtIpoDate" runat="server" style="width:130px;" /></td>
-                </tr>
-                <tr>
-                    <td style="width: 28px; height: 27px;">
-                        Re-coating&#51068;</td>
-                    <td style="width: 20px; height: 27px;">
-                        <input type="date" id="txtRecoatingDate" runat="server" style="width:130px;" /></td>
-                </tr>
-                <tr>
                     <td colspan="3" style="height: 21px">
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3" style="height: 21px">
-                        <asp:Label ID="Label1" runat="server" ForeColor="#0000C0" Text="���� ����� Serial &amp; Cap"></asp:Label></td>
+                        <asp:Label ID="Label1" runat="server" ForeColor="#0000C0" Text="���� ����� Serial & Cap"></asp:Label></td>
                 </tr>
             </table>
-    <table style="border-collapse:collapse; width: 1100px; height: 208px;" border="1" bordercolor="palegoldenrod" align="center" bgcolor="floralwhite">
+    <table style="border-collapse:collapse; width: 1200px; height: 208px;" border="1" bordercolor="palegoldenrod" align="center" bgcolor="floralwhite">
         <tr>
             <td colspan="7">
                 <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" CellPadding="4" DataKeyNames="SERIAL" DataSourceID="SqlDataSource1" EnableModelValidation="True" ForeColor="Black" GridLines="Vertical">
@@ -136,7 +126,7 @@
                 </asp:GridView>
                 <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:MoldConnectionString %>"
                     DeleteCommand='DELETE FROM "TBL_MOLD_CONVERSION_SERIAL_CAP" WHERE "SERIAL" = :original_SERIAL AND (("CAP" = :original_CAP) OR ("CAP" IS NULL AND :original_CAP IS NULL)) AND (("OPERATOR" = :original_OPERATOR) OR ("OPERATOR" IS NULL AND :original_OPERATOR IS NULL)) AND (("NO" = :original_NO) OR ("NO" IS NULL AND :original_NO IS NULL)) AND (("BTM_TYPE" = :original_BTM_TYPE) OR ("BTM_TYPE" IS NULL AND :original_BTM_TYPE IS NULL)) AND (("IPO_DATE" = :original_IPO_DATE) OR ("IPO_DATE" IS NULL AND :original_IPO_DATE IS NULL)) AND (("RECOATING_DATE" = :original_RECOATING_DATE) OR ("RECOATING_DATE" IS NULL AND :original_RECOATING_DATE IS NULL))'
-                    InsertCommand='INSERT INTO "TBL_MOLD_CONVERSION_SERIAL_CAP" ("SERIAL", "CAP", "OPERATOR", "NO", "BTM_TYPE", "IPO_DATE", "RECOATING_DATE") VALUES (:SERIAL, :CAP, :OPERATOR, :NO, :BTM_TYPE, :IPO_DATE, :RECOATING_DATE)'
+                    InsertCommand='INSERT INTO "TBL_MOLD_CONVERSION_SERIAL_CAP" ("SERIAL", "CAP", "OPERATOR", "NO", "BTM_TYPE") VALUES (:SERIAL, :CAP, :OPERATOR, :NO, :BTM_TYPE)'
                     ProviderName="<%$ ConnectionStrings:MoldConnectionString.ProviderName %>" SelectCommand='SELECT * FROM "TBL_MOLD_CONVERSION_SERIAL_CAP"'
                     UpdateCommand='UPDATE "TBL_MOLD_CONVERSION_SERIAL_CAP" SET "CAP" = :CAP, "OPERATOR" = :OPERATOR, "NO" = :NO, "BTM_TYPE" = :BTM_TYPE, "IPO_DATE" = :IPO_DATE, "RECOATING_DATE" = :RECOATING_DATE WHERE "SERIAL" = :original_SERIAL AND (("CAP" = :original_CAP) OR ("CAP" IS NULL AND :original_CAP IS NULL)) AND (("OPERATOR" = :original_OPERATOR) OR ("OPERATOR" IS NULL AND :original_OPERATOR IS NULL)) AND (("NO" = :original_NO) OR ("NO" IS NULL AND :original_NO IS NULL)) AND (("BTM_TYPE" = :original_BTM_TYPE) OR ("BTM_TYPE" IS NULL AND :original_BTM_TYPE IS NULL)) AND (("IPO_DATE" = :original_IPO_DATE) OR ("IPO_DATE" IS NULL AND :original_IPO_DATE IS NULL)) AND (("RECOATING_DATE" = :original_RECOATING_DATE) OR ("RECOATING_DATE" IS NULL AND :original_RECOATING_DATE IS NULL))' ConflictDetection="CompareAllValues" OldValuesParameterFormatString="original_{0}">
                     <DeleteParameters>
@@ -154,8 +144,6 @@
                         <asp:Parameter Name="OPERATOR" Type="String" />
                         <asp:Parameter Name="NO" Type="String" />
                         <asp:Parameter Name="BTM_TYPE" Type="String" />
-                        <asp:Parameter Name="IPO_DATE" Type="String" />
-                        <asp:Parameter Name="RECOATING_DATE" Type="String" />
                     </InsertParameters>
                     <UpdateParameters>
                         <asp:Parameter Name="CAP" Type="String" />

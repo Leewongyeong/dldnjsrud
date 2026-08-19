@@ -14,9 +14,11 @@ using System.Drawing;
 public partial class Insert : System.Web.UI.Page
 {
     string strCon = "Data Source=sckcimdwh.world; User ID=moldpcsd;Pwd=pcsdmold!";
+    //string strConMC = "Data Source=sckmes.world; User ID=sch_it;Pwd=mesdw";
 
     protected void Page_Load(object sender, EventArgs e)
     {
+
         if (Session["ID"] == null)
         {
             Response.Redirect("Default.aspx");
@@ -49,7 +51,7 @@ public partial class Insert : System.Web.UI.Page
         if (txtBtmType.Text == "")
         {
             ClientScript.RegisterStartupScript(this.GetType(), "register", "alert('BTM_TYPE 입력하세요');", true);
-            txtBtmType.Focus();
+            txtNO.Focus();
             return;
         }
 
@@ -58,21 +60,8 @@ public partial class Insert : System.Web.UI.Page
             int mold;
             StringBuilder sql1 = new StringBuilder();
 
-            // 날짜는 선택값 — 비어있으면 NULL 처리
-            string ipoDate      = string.IsNullOrEmpty(txtIpoDate.Value)
-                                  ? "NULL" : "'" + txtIpoDate.Value + "'";
-            string recoatingDate = string.IsNullOrEmpty(txtRecoatingDate.Value)
-                                  ? "NULL" : "'" + txtRecoatingDate.Value + "'";
-
-            sql1.Append("INSERT INTO TBL_MOLD_CONVERSION_SERIAL_CAP");
-            sql1.Append("(SERIAL, CAP, OPERATOR, NO, BTM_TYPE, IPO_DATE, RECOATING_DATE) VALUES(");
-            sql1.Append("'" + txtSerial.Text + "',");
-            sql1.Append("'" + txtCap.Text + "',");
-            sql1.Append("'" + lbloperator.Text + "',");
-            sql1.Append("'" + txtNO.Text + "',");
-            sql1.Append("'" + txtBtmType.Text + "',");
-            sql1.Append(ipoDate + ",");
-            sql1.Append(recoatingDate + ")");
+            sql1.Append("insert into TBL_MOLD_CONVERSION_SERIAL_CAP(SERIAL, CAP, OPERATOR, NO,BTM_TYPE) VALUES(");
+            sql1.Append(" '" + txtSerial.Text + "','" + txtCap.Text + "', '" + lbloperator.Text + "', '" + txtNO.Text + "','"+txtBtmType.Text+ "')");
 
             mold = SQL_HELPER.SqlHelper.ExecuteNonQuery(strCon, CommandType.Text, sql1.ToString());
 
@@ -80,16 +69,22 @@ public partial class Insert : System.Web.UI.Page
             {
                 Page.RegisterClientScriptBlock("alert", "<script language='javascript'>alert('입력이 완료 되었습니다. ');location.href='Insert.aspx';</script>");
             }
+
             else
             {
                 ClientScript.RegisterStartupScript(
                            this.GetType(), "register",
                            "alert('입력되지 않았습니다');", true);
+                return;
             }
+
         }
+
         catch (Exception ex)
         {
+
             Response.Write("<script>alert('" + ex.Message.Substring(0, ex.Message.Length - 2) + "');</script>");
+
         }
     }
 
