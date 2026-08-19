@@ -80,13 +80,13 @@
                     <td style="width: 28px; height: 27px;">
                         &#51077;&#44256;&#51068;</td>
                     <td style="width: 20px; height: 27px;">
-                        <asp:TextBox ID="txtIpoDate" runat="server" Width="130px" TextMode="Date"></asp:TextBox></td>
+                        <input type="date" id="txtIpoDate" runat="server" style="width:130px;" /></td>
                 </tr>
                 <tr>
                     <td style="width: 28px; height: 27px;">
                         Re-coating&#51068;</td>
                     <td style="width: 20px; height: 27px;">
-                        <asp:TextBox ID="txtRecoatingDate" runat="server" Width="130px" TextMode="Date"></asp:TextBox></td>
+                        <input type="date" id="txtRecoatingDate" runat="server" style="width:130px;" /></td>
                 </tr>
                 <tr>
                     <td colspan="3" style="height: 21px">
@@ -114,8 +114,8 @@
                                 <%# Eval("IPO_DATE") %>
                             </ItemTemplate>
                             <EditItemTemplate>
-                                <asp:TextBox ID="txtEditIpoDate" runat="server" TextMode="Date"
-                                    Text='<%# Bind("IPO_DATE") %>' Width="120px"></asp:TextBox>
+                                <input type="date" id="txtEditIpoDate" runat="server"
+                                    value='<%# Bind("IPO_DATE") %>' style="width:120px;" />
                             </EditItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField HeaderText="Re-coating&#51068;">
@@ -123,8 +123,8 @@
                                 <%# Eval("RECOATING_DATE") %>
                             </ItemTemplate>
                             <EditItemTemplate>
-                                <asp:TextBox ID="txtEditRecoatingDate" runat="server" TextMode="Date"
-                                    Text='<%# Bind("RECOATING_DATE") %>' Width="120px"></asp:TextBox>
+                                <input type="date" id="txtEditRecoatingDate" runat="server"
+                                    value='<%# Bind("RECOATING_DATE") %>' style="width:120px;" />
                             </EditItemTemplate>
                         </asp:TemplateField>
                     </Columns>

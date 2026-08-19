@@ -59,10 +59,10 @@ public partial class Insert : System.Web.UI.Page
             StringBuilder sql1 = new StringBuilder();
 
             // 날짜는 선택값 — 비어있으면 NULL 처리
-            string ipoDate      = string.IsNullOrEmpty(txtIpoDate.Text)
-                                  ? "NULL" : "'" + txtIpoDate.Text + "'";
-            string recoatingDate = string.IsNullOrEmpty(txtRecoatingDate.Text)
-                                  ? "NULL" : "'" + txtRecoatingDate.Text + "'";
+            string ipoDate      = string.IsNullOrEmpty(txtIpoDate.Value)
+                                  ? "NULL" : "'" + txtIpoDate.Value + "'";
+            string recoatingDate = string.IsNullOrEmpty(txtRecoatingDate.Value)
+                                  ? "NULL" : "'" + txtRecoatingDate.Value + "'";
 
             sql1.Append("INSERT INTO TBL_MOLD_CONVERSION_SERIAL_CAP");
             sql1.Append("(SERIAL, CAP, OPERATOR, NO, BTM_TYPE, IPO_DATE, RECOATING_DATE) VALUES(");
