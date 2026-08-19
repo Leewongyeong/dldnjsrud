@@ -104,8 +104,9 @@
                                 <%# Eval("IPO_DATE") %>
                             </ItemTemplate>
                             <EditItemTemplate>
-                                <input type="date" id="txtEditIpoDate" runat="server"
-                                    value='<%# Bind("IPO_DATE") %>' style="width:120px;" />
+                                <asp:TextBox ID="txtEditIpoDate" runat="server"
+                                    Text='<%# Bind("IPO_DATE") %>' Width="100px"
+                                    placeholder="yyyy-mm-dd" MaxLength="10"></asp:TextBox>
                             </EditItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField HeaderText="Re-coating&#51068;">
@@ -113,8 +114,9 @@
                                 <%# Eval("RECOATING_DATE") %>
                             </ItemTemplate>
                             <EditItemTemplate>
-                                <input type="date" id="txtEditRecoatingDate" runat="server"
-                                    value='<%# Bind("RECOATING_DATE") %>' style="width:120px;" />
+                                <asp:TextBox ID="txtEditRecoatingDate" runat="server"
+                                    Text='<%# Bind("RECOATING_DATE") %>' Width="100px"
+                                    placeholder="yyyy-mm-dd" MaxLength="10"></asp:TextBox>
                             </EditItemTemplate>
                         </asp:TemplateField>
                     </Columns>
