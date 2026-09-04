@@ -1,0 +1,20 @@
+<!--
+  ==========================================================================================
+   Data Modify 사이트 web.config
+   - <appSettings> 안에 아래 2개 key 가 없으면 추가한다. (이미 있으면 그대로 사용)
+   - 이 두 접속 문자열은 "메일 발송 프로시저(RTS.KSY_SEND_MAIL) 호출 전용" 이다.
+     화면의 데이터 조회/수정/삭제는 기존 MoldConnectionString / MOLD_SIP_ConnectionString 을
+     그대로 쓴다. (건드리지 않는다)
+  ==========================================================================================
+-->
+<appSettings>
+
+  <!-- Mold.aspx (SOC) 삭제 시 Auto Mail : RTS.KSY_SEND_MAIL @ SCKCIMDWH -->
+  <add key="_CONSTR_RTS_SCKCIMDWH"
+       value="Data Source=SCKCIMDWH.WORLD;User ID=rts;Password=rts4sck0;Validate Connection=True;" />
+
+  <!-- Mold_SIP.aspx (SIP) 삭제 시 Auto Mail : RTS.KSY_SEND_MAIL @ SIPPRD -->
+  <add key="_CONSTR_RTS_SIPPRD"
+       value="Data Source=SIPPRD;User ID=rts;Password=rts4sck0;Validate Connection=True;" />
+
+</appSettings>
