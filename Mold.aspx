@@ -1,4 +1,104 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Mold.aspx.cs" Inherits="Data_modify.Mold" %>
+<%@ Import Namespace="System" %>
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="System.Web" %>
+<%@ Import Namespace="System.Web.UI.WebControls" %>
+<%@ Import Namespace="System.Configuration" %>
+<%@ Import Namespace="Oracle.DataAccess.Client" %>
+<script runat="server">
+
+    // ------------------------------------------------------------------
+    //  .aspx.cs 원본 소스가 없어(구버전 배포) 코드비하인드를 수정할 수 없어
+    //  마크업(.aspx) 안에 인라인 서버 스크립트로 삭제 알림메일 기능을 추가한다.
+    //  ASP.NET 은 CodeBehind 방식이어도 요청 시 이 .aspx 를
+    //  Inherits="Data_modify.Mold" 를 상속하는 클래스로 동적 컴파일하므로,
+    //  여기 작성한 메서드가 그 파생 클래스의 멤버로 그대로 포함된다.
+    //  (기존 배포된 Mold.aspx.cs/DLL 은 전혀 건드리지 않는다)
+    // ------------------------------------------------------------------
+
+    private const string MAIL_CONSTR_KEY = "_CONSTR_RTS_SCKCIMDWH";
+    private const string MAIL_MODE = "MOLD_DEL:";
+
+    protected void GridView1_RowDeleted(object sender, GridViewDeletedEventArgs e)
+    {
+        if (e.Exception != null || e.AffectedRows <= 0)
+        {
+            return;
+        }
+
+        string equipId = GetDeletedValue(e, "MACHINE_ID");
+        string lotId = GetDeletedValue(e, "LOTID");
+
+        if (equipId.Length == 0 && lotId.Length == 0)
+        {
+            return;
+        }
+
+        try
+        {
+            SendDeletedMoldMail(equipId, lotId);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.Write("RTS.KSY_SEND_MAIL(MOLD_DEL) FAIL : " + ex.Message);
+        }
+    }
+
+    private static string GetDeletedValue(GridViewDeletedEventArgs e, string fieldName)
+    {
+        object value = null;
+
+        if (e.Keys != null)
+        {
+            value = e.Keys[fieldName];
+        }
+
+        if (value == null && e.Values != null)
+        {
+            value = e.Values[fieldName];
+        }
+
+        if (value == null)
+        {
+            return string.Empty;
+        }
+
+        return HttpUtility.HtmlDecode(Convert.ToString(value)).Replace('\u00A0', ' ').Trim();
+    }
+
+    private static void SendDeletedMoldMail(string equipId, string lotId)
+    {
+        string connStr = ConfigurationManager.AppSettings[MAIL_CONSTR_KEY];
+
+        if (string.IsNullOrEmpty(connStr)
+            && ConfigurationManager.ConnectionStrings[MAIL_CONSTR_KEY] != null)
+        {
+            connStr = ConfigurationManager.ConnectionStrings[MAIL_CONSTR_KEY].ConnectionString;
+        }
+
+        if (string.IsNullOrEmpty(connStr))
+        {
+            throw new ConfigurationErrorsException(MAIL_CONSTR_KEY + " 가 web.config 에 없습니다.");
+        }
+
+        string pMode = MAIL_MODE
+                     + equipId.Replace("|", "").Replace(";", "")
+                     + "|"
+                     + lotId.Replace("|", "").Replace(";", "");
+
+        using (OracleConnection conn = new OracleConnection(connStr))
+        using (OracleCommand cmd = new OracleCommand("RTS.KSY_SEND_MAIL", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new OracleParameter("P_MODE", pMode));
+
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+</script>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
     <style type="text/css">
 

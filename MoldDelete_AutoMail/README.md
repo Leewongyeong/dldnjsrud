@@ -39,21 +39,106 @@ Data Modify 사이트에서 Mold ELog 데이터를 **Delete** 할 때
 
 ## 2. 수정 파일 목록
 
+> **전제** : `Mold.aspx.cs` / `Mold_SIP.aspx.cs` **원본 소스가 없다** (구버전 배포, 코드비하인드는
+> 이미 컴파일된 DLL 상태로만 서버에 있음). 그래서 코드비하인드는 손대지 않고,
+> **`.aspx` 마크업 파일 안에 `<script runat="server">` 인라인 코드**로 전부 처리한다.
+>
+> ASP.NET 은 `CodeBehind` 방식이어도 요청이 들어올 때마다 `.aspx` 를 파싱해서
+> `Inherits="Data_modify.Mold"` (기존 배포된 클래스) 를 **상속하는 새 클래스를 런타임에 동적 컴파일**한다.
+> 이때 `.aspx` 안의 `<script runat="server">` 코드는 그 파생 클래스의 멤버로 그대로 포함되므로,
+> 원본 `.cs` 소스나 프로젝트 없이도 IIS 에 `.aspx` 텍스트 파일만 새로 올리면
+> 다음 요청부터 자동 반영된다 (재컴파일/재배포 불필요).
+
 | 파일 | 수정 내용 |
 |---|---|
-| `Mold.aspx` | GridView1 태그에 `OnRowDeleted="GridView1_RowDeleted"` 1줄 추가 (**이 저장소 루트에 수정본 있음**) |
+| `Mold.aspx` | ① `<%@ Import %>` 지시문 + `<script runat="server">` 블록 추가, ② GridView1 태그에 `OnRowDeleted="GridView1_RowDeleted"` 추가 (**이 저장소 루트에 수정본 있음**) |
 | `Mold_SIP.aspx` | 동일 (**이 저장소 루트에 수정본 있음**) |
-| `Mold.aspx.cs` | 이벤트 핸들러 + 프로시저 호출 메서드 추가 → `Mold.aspx.cs.snippet.cs` |
-| `Mold_SIP.aspx.cs` | 동일 → `Mold_SIP.aspx.cs.snippet.cs` |
-| `web.config` | appSettings 접속 문자열 2개 확인/추가 → `web.config.snippet.xml` |
+| `Mold.aspx.cs` / `Mold_SIP.aspx.cs` | **수정 안 함** (원본 없음 → 건드릴 필요도 없음) |
+| `web.config` | appSettings 접속 문자열 2개 확인/추가 → `web.config.snippet.xml` (이건 컴파일 대상이 아닌 설정 파일이라 원본 프로젝트 없이도 편집 가능) |
 | `RTS.KSY_SEND_MAIL` (SCKCIMDWH) | `MOLD_DEL:` 분기 추가 → `KSY_SEND_MAIL_MOLD_DEL_SCKCIMDWH.sql` |
 | `RTS.KSY_SEND_MAIL` (SIPPRD) | `MOLD_DEL:` 분기 추가 → `KSY_SEND_MAIL_MOLD_DEL_SIPPRD.sql` |
 
+> `Mold.aspx.cs.snippet.cs` / `Mold_SIP.aspx.cs.snippet.cs` 는 **참고용(대안)** 으로 남겨둔다.
+> 나중에 원본 프로젝트/소스를 구해서 정식으로 코드비하인드에 넣고 싶어지면 그 내용을 그대로 옮기면 된다.
+> 지금 당장 배포하는 버전은 `.aspx` 인라인 스크립트만으로 완결된다.
+
 ---
 
-## 3. 화면(.aspx) 수정
+## 3. 화면(.aspx) 수정 — Import 지시문 + 인라인 스크립트 + 이벤트 연결
 
-`Mold.aspx` / `Mold_SIP.aspx` 둘 다 GridView1 여는 태그에 이벤트 하나만 추가한다.
+`Mold.aspx` 기준 (`Mold_SIP.aspx` 는 커넥션 key 만 다름). `@ Page` 지시문 바로 아래,
+첫 `<asp:Content>` 시작 전에 아래를 통째로 추가한다.
+
+```aspx
+<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Mold.aspx.cs" Inherits="Data_modify.Mold" %>
+<%@ Import Namespace="System" %>
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="System.Web" %>
+<%@ Import Namespace="System.Web.UI.WebControls" %>
+<%@ Import Namespace="System.Configuration" %>
+<%@ Import Namespace="Oracle.DataAccess.Client" %>
+<script runat="server">
+
+    private const string MAIL_CONSTR_KEY = "_CONSTR_RTS_SCKCIMDWH";
+    private const string MAIL_MODE = "MOLD_DEL:";
+
+    protected void GridView1_RowDeleted(object sender, GridViewDeletedEventArgs e)
+    {
+        if (e.Exception != null || e.AffectedRows <= 0) return;   // 진짜 지워진 건만
+
+        string equipId = GetDeletedValue(e, "MACHINE_ID");
+        string lotId = GetDeletedValue(e, "LOTID");
+        if (equipId.Length == 0 && lotId.Length == 0) return;
+
+        try { SendDeletedMoldMail(equipId, lotId); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.Write("RTS.KSY_SEND_MAIL(MOLD_DEL) FAIL : " + ex.Message);
+        }
+    }
+
+    private static string GetDeletedValue(GridViewDeletedEventArgs e, string fieldName)
+    {
+        object value = null;
+        if (e.Keys != null) value = e.Keys[fieldName];
+        if (value == null && e.Values != null) value = e.Values[fieldName];
+        if (value == null) return string.Empty;
+
+        return HttpUtility.HtmlDecode(Convert.ToString(value)).Replace('\u00A0', ' ').Trim();
+    }
+
+    private static void SendDeletedMoldMail(string equipId, string lotId)
+    {
+        string connStr = ConfigurationManager.AppSettings[MAIL_CONSTR_KEY];
+        if (string.IsNullOrEmpty(connStr) && ConfigurationManager.ConnectionStrings[MAIL_CONSTR_KEY] != null)
+            connStr = ConfigurationManager.ConnectionStrings[MAIL_CONSTR_KEY].ConnectionString;
+        if (string.IsNullOrEmpty(connStr))
+            throw new ConfigurationErrorsException(MAIL_CONSTR_KEY + " 가 web.config 에 없습니다.");
+
+        string pMode = MAIL_MODE
+                     + equipId.Replace("|", "").Replace(";", "")
+                     + "|"
+                     + lotId.Replace("|", "").Replace(";", "");
+
+        using (OracleConnection conn = new OracleConnection(connStr))
+        using (OracleCommand cmd = new OracleCommand("RTS.KSY_SEND_MAIL", conn))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new OracleParameter("P_MODE", pMode));
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+</script>
+<asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
+    ...
+```
+
+(실제 삽입된 전체 내용은 저장소 루트의 `Mold.aspx` / `Mold_SIP.aspx` 참고. `Mold_SIP.aspx` 는
+`MAIL_CONSTR_KEY` 값만 `"_CONSTR_RTS_SIPPRD"` 로 다르다.)
+
+그리고 GridView1 여는 태그에 이벤트를 연결한다.
 
 ```diff
          <asp:GridView ID="GridView1" runat="server"
@@ -69,70 +154,37 @@ Data Modify 사이트에서 Mold ELog 데이터를 **Delete** 할 때
 > 삭제가 실패했는데 메일만 나가는 상황을 막기 위함이다.
 > SqlDataSource / DeleteCommand / DeleteParameters 는 **전혀 손대지 않는다.**
 
----
-
-## 4. 코드비하인드(.aspx.cs) 수정
-
-`Mold.aspx.cs.snippet.cs` / `Mold_SIP.aspx.cs.snippet.cs` 내용을 기존 클래스 안에 붙여넣는다.
-두 파일 차이는 **클래스명 / 접속 문자열 key / 발신자** 뿐이다.
-
-핵심 로직 3단계.
-
-```csharp
-protected void GridView1_RowDeleted(object sender, GridViewDeletedEventArgs e)
-{
-    // (1) 진짜 지워진 건만
-    if (e.Exception != null || e.AffectedRows <= 0) return;
-
-    // (2) 지워진 행에서 장비/LOT 꺼내기
-    string equipId = GetDeletedValue(e, "MACHINE_ID");
-    string lotId   = GetDeletedValue(e, "LOTID");
-    if (equipId.Length == 0 && lotId.Length == 0) return;
-
-    // (3) 메일 발송 (실패해도 화면은 안 죽게 try/catch)
-    try   { SendDeletedMoldMail(equipId, lotId); }
-    catch (Exception ex) { System.Diagnostics.Trace.Write("... FAIL : " + ex.Message); }
-}
-```
-
 ### 값 꺼내는 부분 주의사항
 
 * `DataKeyNames="SEQ"` 라서 **MACHINE_ID / LOTID 는 `e.Keys` 가 아니라 `e.Values` 에 들어온다.**
 * 이 페이지는 `ConflictDetection="CompareAllValues"` 라서 DELETE 문의 `original_*` 파라미터용으로
   **전체 컬럼이 이미 `e.Values` 로 넘어오고 있다.** (그래서 지금 삭제가 정상 동작하는 것)
   → 별도 조회 없이 그대로 쓰면 된다.
-* snippet 의 `GetDeletedValue()` 는 `e.Keys` → `e.Values` 순으로 찾으므로,
-  혹시 값이 안 넘어오면 `.aspx` 의 `DataKeyNames="SEQ"` 를 `DataKeyNames="SEQ,MACHINE_ID,LOTID"` 로만
-  바꾸면 코드 수정 없이 그대로 동작한다. (키가 늘어나도 기존 DELETE 문은 그대로 동작함)
+* `GetDeletedValue()` 는 `e.Keys` → `e.Values` 순으로 찾으므로, 혹시 값이 안 넘어오면
+  `.aspx` 의 `DataKeyNames="SEQ"` 를 `DataKeyNames="SEQ,MACHINE_ID,LOTID"` 로만 바꾸면
+  코드 수정 없이 그대로 동작한다. (키가 늘어나도 기존 DELETE 문은 그대로 동작함)
 
-### 프로시저 호출
+### 인라인 스크립트 관련 주의사항
 
-```csharp
-using (OracleConnection conn = new OracleConnection(connStr))
-using (OracleCommand cmd = new OracleCommand("RTS.KSY_SEND_MAIL", conn))
-{
-    cmd.CommandType = CommandType.StoredProcedure;
-    cmd.Parameters.Add(new OracleParameter("P_MODE", "MOLD_DEL:" + equipId + "|" + lotId));
-    conn.Open();
-    cmd.ExecuteNonQuery();
-}
-```
-
-* `connStr` : `ConfigurationManager.AppSettings["_CONSTR_RTS_SCKCIMDWH"]` (SIP 는 `_CONSTR_RTS_SIPPRD`)
-* **데이터 삭제용 커넥션(MoldConnectionString)과 별개의 커넥션**이다. 삭제 트랜잭션과 무관하므로
-  메일이 실패해도 삭제는 이미 커밋되어 있고, 반대로 메일 때문에 삭제가 롤백되지도 않는다.
+* **네임스페이스 임포트는 `using` 이 아니라 `<%@ Import Namespace="..." %>` 지시문**으로 한다.
+  (인라인 코드는 클래스 본문에 들어가는 것이라 `using` 지시문을 쓸 수 없다)
 * Oracle Provider 는 사이트에서 쓰는 것에 맞춘다.
-  ODP.NET 이면 `Oracle.DataAccess.Client`, Devart 면 `Devart.Data.Oracle` 로 using 만 바꾸면 된다.
-  (접속 문자열의 `Validate Connection=True` 는 두 Provider 다 지원한다)
+  ODP.NET 이면 `Oracle.DataAccess.Client`, Devart 면 `Devart.Data.Oracle` 로
+  `<%@ Import %>` 한 줄만 바꾸면 된다. (접속 문자열의 `Validate Connection=True` 는 두 Provider 다 지원)
+* **데이터 삭제용 커넥션(MoldConnectionString)과 별개의 커넥션**을 새로 연다. 삭제 트랜잭션과
+  무관하므로 메일이 실패해도 삭제는 이미 커밋되어 있고, 반대로 메일 때문에 삭제가 롤백되지도 않는다.
+* `MAIL_CONSTR_KEY`, `GetDeletedValue`, `SendDeletedMoldMail` 같은 이름이 기존(보이지 않는)
+  `Mold.aspx.cs` 안에 **이미 있을 가능성은 낮지만**, 배포 후 컴파일 에러(`중복된 멤버` 등)가 나면
+  이름이 겹친 것이므로 이 블록의 이름만 다른 걸로 바꿔주면 된다.
 
 ---
 
-## 5. 프로시저 수정
+## 4. 프로시저 수정
 
 두 DB 모두 프로시저명은 `RTS.KSY_SEND_MAIL` 로 같고, **분기(ELSIF) 하나만 추가**한다.
 선언부(변수)는 손댈 게 없다. 기존 `L_CRLF / L_SENDER / L_SUBJECT / L_RECIPIENTS / L_MESSAGE` 재사용.
 
-### 5-1. SCKCIMDWH (Mold.aspx 용) — `KSY_SEND_MAIL_MOLD_DEL_SCKCIMDWH.sql`
+### 4-1. SCKCIMDWH (Mold.aspx 용) — `KSY_SEND_MAIL_MOLD_DEL_SCKCIMDWH.sql`
 
 맨 마지막 분기 `P_MODE = 'DPELOG_RELEASE'` 가 끝나고 최상위 `END IF;` (EXCEPTION 바로 위) 앞에 삽입.
 
@@ -145,12 +197,12 @@ using (OracleCommand cmd = new OracleCommand("RTS.KSY_SEND_MAIL", conn))
 EXCEPTION
 ```
 
-### 5-2. SIPPRD (Mold_SIP.aspx 용) — `KSY_SEND_MAIL_MOLD_DEL_SIPPRD.sql`
+### 4-2. SIPPRD (Mold_SIP.aspx 용) — `KSY_SEND_MAIL_MOLD_DEL_SIPPRD.sql`
 
 맨 마지막 분기 `SUBSTR(P_MODE,1,16) = 'MOLD_PE_CONFIRM:'` 블록이 끝나고 최상위 `END IF;` 앞에 삽입.
 내용은 SCK 와 동일하고 **발신자만 `SIP_MANAGER@jcetglobal.com`** 이다.
 
-### 5-3. 추가되는 분기 내용
+### 4-3. 추가되는 분기 내용
 
 ```sql
     ELSIF SUBSTR (P_MODE, 1, 9) = 'MOLD_DEL:'
@@ -184,7 +236,7 @@ EXCEPTION
 
 ---
 
-## 6. 테스트 방법
+## 5. 테스트 방법
 
 ### 프로시저 단독 테스트 (SQL*Plus / Toad)
 
@@ -215,8 +267,11 @@ AS322_______________0000HA34Y47.0000
 
 ---
 
-## 7. 확인/주의 사항
+## 6. 확인/주의 사항
 
+* **인라인 스크립트가 안 통하는 경우** : 사이트가 `aspnet_compiler` 로 "고정 네이밍 + 단일 어셈블리(-fixednames, 즉 마크업 없는 완전 사전컴파일)" 로 배포되어 있으면 서버에 `.aspx` 텍스트 자체가 없어서 이 방법이 안 통한다.
+  지금 받은 파일들이 실제 `.aspx` 텍스트라는 건 서버에도 `.aspx` 원본이 그대로 배포돼 있다는 뜻이라 대부분의 경우(특히 오래된 사내 사이트)는 문제없다. 배포 후 페이지가 뜨는지만 확인하면 된다.
+* 인라인 스크립트를 넣은 `.aspx` 를 배포하면 **해당 페이지의 첫 요청에서 서버가 새로 컴파일**하느라 살짝(보통 1초 내) 지연이 있을 수 있다. 이후 요청부터는 캐시된 어셈블리로 정상 속도.
 * **UTL_MAIL 사용 가능 여부** : 두 DB 다 이미 다른 모드에서 `UTL_MAIL.SEND` 를 쓰고 있으므로
   패키지 설치, `SMTP_OUT_SERVER` 파라미터, ACL 은 이미 되어 있다. 추가 작업 없음.
 * **권한** : 웹에서 쓰는 계정이 `rts` (프로시저 소유자) 이므로 별도 GRANT 불필요.
