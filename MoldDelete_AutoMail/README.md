@@ -39,7 +39,7 @@ Data Modify 사이트에서 Mold ELog 데이터를 **Delete** 할 때
 
 ## 2. 수정 파일 목록
 
-> **전제** : `Mold.aspx.cs` / `Mold_SIP.aspx.cs` **원본 소스가 없다** (구버전 배포, 코드비하인드는
+> **전제 1** : `Mold.aspx.cs` / `Mold_SIP.aspx.cs` **원본 소스가 없다** (구버전 배포, 코드비하인드는
 > 이미 컴파일된 DLL 상태로만 서버에 있음). 그래서 코드비하인드는 손대지 않고,
 > **`.aspx` 마크업 파일 안에 `<script runat="server">` 인라인 코드**로 전부 처리한다.
 >
@@ -48,13 +48,28 @@ Data Modify 사이트에서 Mold ELog 데이터를 **Delete** 할 때
 > 이때 `.aspx` 안의 `<script runat="server">` 코드는 그 파생 클래스의 멤버로 그대로 포함되므로,
 > 원본 `.cs` 소스나 프로젝트 없이도 IIS 에 `.aspx` 텍스트 파일만 새로 올리면
 > 다음 요청부터 자동 반영된다 (재컴파일/재배포 불필요).
+>
+> **전제 2** : 실제 `web.config` (`Web.config` 로 별도 첨부) 를 확인했다. 이 사이트는
+> - Provider 가 `Oracle.DataAccess.Client`(ODP.NET) 나 Devart 가 아니라 **`System.Data.OracleClient`**
+>   (구 MS 내장 드라이버, `MoldConnectionString`/`SBMConnectionString` 등과 동일)
+> - `<appSettings>` 가 아니라 **`<connectionStrings>`** 방식
+>
+>   이다. 그리고 **RTS 스키마용 접속 문자열이 SCK(SOC) 쪽엔 이미 있다.**
+>   ```xml
+>   <add name="rtsConnectionString"
+>        connectionString="Data Source=sckcimdwh.world;Persist Security Info=True;User ID=RTS;Password=RTS4sck0;Unicode=True"
+>        providerName="System.Data.OracleClient"/>
+>   ```
+>   → **SCK(Mold.aspx) 쪽은 web.config 를 전혀 수정할 필요가 없다.** 이 기존 항목을 그대로 재사용한다.
+>   SIP(SIPPRD) 쪽은 rts 계정으로 붙는 항목이 없어서 `rtsSIPConnectionString` 1개만 새로 추가한다.
 
 | 파일 | 수정 내용 |
 |---|---|
 | `Mold.aspx` | ① `<%@ Import %>` 지시문 + `<script runat="server">` 블록 추가, ② GridView1 태그에 `OnRowDeleted="GridView1_RowDeleted"` 추가 (**이 저장소 루트에 수정본 있음**) |
 | `Mold_SIP.aspx` | 동일 (**이 저장소 루트에 수정본 있음**) |
 | `Mold.aspx.cs` / `Mold_SIP.aspx.cs` | **수정 안 함** (원본 없음 → 건드릴 필요도 없음) |
-| `web.config` | appSettings 접속 문자열 2개 확인/추가 → `web.config.snippet.xml` (이건 컴파일 대상이 아닌 설정 파일이라 원본 프로젝트 없이도 편집 가능) |
+| `web.config` (SCK) | **수정 없음** — 기존 `rtsConnectionString` 재사용 |
+| `web.config` (SIP) | `<connectionStrings>` 에 `rtsSIPConnectionString` 1개 추가 → `web.config.snippet.xml` |
 | `RTS.KSY_SEND_MAIL` (SCKCIMDWH) | `MOLD_DEL:` 분기 추가 → `KSY_SEND_MAIL_MOLD_DEL_SCKCIMDWH.sql` |
 | `RTS.KSY_SEND_MAIL` (SIPPRD) | `MOLD_DEL:` 분기 추가 → `KSY_SEND_MAIL_MOLD_DEL_SIPPRD.sql` |
 
@@ -66,8 +81,8 @@ Data Modify 사이트에서 Mold ELog 데이터를 **Delete** 할 때
 
 ## 3. 화면(.aspx) 수정 — Import 지시문 + 인라인 스크립트 + 이벤트 연결
 
-`Mold.aspx` 기준 (`Mold_SIP.aspx` 는 커넥션 key 만 다름). `@ Page` 지시문 바로 아래,
-첫 `<asp:Content>` 시작 전에 아래를 통째로 추가한다.
+`Mold.aspx` 기준 (`Mold_SIP.aspx` 는 `MAIL_CONSTR_KEY` 값만 `"rtsSIPConnectionString"` 로 다르다).
+`@ Page` 지시문 바로 아래, 첫 `<asp:Content>` 시작 전에 아래를 통째로 추가한다.
 
 ```aspx
 <%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Mold.aspx.cs" Inherits="Data_modify.Mold" %>
@@ -76,10 +91,10 @@ Data Modify 사이트에서 Mold ELog 데이터를 **Delete** 할 때
 <%@ Import Namespace="System.Web" %>
 <%@ Import Namespace="System.Web.UI.WebControls" %>
 <%@ Import Namespace="System.Configuration" %>
-<%@ Import Namespace="Oracle.DataAccess.Client" %>
+<%@ Import Namespace="System.Data.OracleClient" %>
 <script runat="server">
 
-    private const string MAIL_CONSTR_KEY = "_CONSTR_RTS_SCKCIMDWH";
+    private const string MAIL_CONSTR_KEY = "rtsConnectionString";   // SIP 는 "rtsSIPConnectionString"
     private const string MAIL_MODE = "MOLD_DEL:";
 
     protected void GridView1_RowDeleted(object sender, GridViewDeletedEventArgs e)
@@ -109,18 +124,16 @@ Data Modify 사이트에서 Mold ELog 데이터를 **Delete** 할 때
 
     private static void SendDeletedMoldMail(string equipId, string lotId)
     {
-        string connStr = ConfigurationManager.AppSettings[MAIL_CONSTR_KEY];
-        if (string.IsNullOrEmpty(connStr) && ConfigurationManager.ConnectionStrings[MAIL_CONSTR_KEY] != null)
-            connStr = ConfigurationManager.ConnectionStrings[MAIL_CONSTR_KEY].ConnectionString;
-        if (string.IsNullOrEmpty(connStr))
-            throw new ConfigurationErrorsException(MAIL_CONSTR_KEY + " 가 web.config 에 없습니다.");
+        ConnectionStringSettings setting = ConfigurationManager.ConnectionStrings[MAIL_CONSTR_KEY];
+        if (setting == null)
+            throw new ConfigurationErrorsException(MAIL_CONSTR_KEY + " 가 web.config <connectionStrings> 에 없습니다.");
 
         string pMode = MAIL_MODE
                      + equipId.Replace("|", "").Replace(";", "")
                      + "|"
                      + lotId.Replace("|", "").Replace(";", "");
 
-        using (OracleConnection conn = new OracleConnection(connStr))
+        using (OracleConnection conn = new OracleConnection(setting.ConnectionString))
         using (OracleCommand cmd = new OracleCommand("RTS.KSY_SEND_MAIL", conn))
         {
             cmd.CommandType = CommandType.StoredProcedure;
@@ -135,8 +148,7 @@ Data Modify 사이트에서 Mold ELog 데이터를 **Delete** 할 때
     ...
 ```
 
-(실제 삽입된 전체 내용은 저장소 루트의 `Mold.aspx` / `Mold_SIP.aspx` 참고. `Mold_SIP.aspx` 는
-`MAIL_CONSTR_KEY` 값만 `"_CONSTR_RTS_SIPPRD"` 로 다르다.)
+(실제 삽입된 전체 내용은 저장소 루트의 `Mold.aspx` / `Mold_SIP.aspx` 참고.)
 
 그리고 GridView1 여는 태그에 이벤트를 연결한다.
 
@@ -168,9 +180,11 @@ Data Modify 사이트에서 Mold ELog 데이터를 **Delete** 할 때
 
 * **네임스페이스 임포트는 `using` 이 아니라 `<%@ Import Namespace="..." %>` 지시문**으로 한다.
   (인라인 코드는 클래스 본문에 들어가는 것이라 `using` 지시문을 쓸 수 없다)
-* Oracle Provider 는 사이트에서 쓰는 것에 맞춘다.
-  ODP.NET 이면 `Oracle.DataAccess.Client`, Devart 면 `Devart.Data.Oracle` 로
-  `<%@ Import %>` 한 줄만 바꾸면 된다. (접속 문자열의 `Validate Connection=True` 는 두 Provider 다 지원)
+* **Provider 는 실제 `web.config` 로 확인된 `System.Data.OracleClient` 를 그대로 쓴다.**
+  `MoldConnectionString`(`ConflictDetection="CompareAllValues"` 로 삭제하는 그 커넥션)도
+  같은 Provider 라 사이트 안에서 이미 검증된 조합이다.
+  단, `System.Data.OracleClient` 는 .NET 4 부터 `[Obsolete]` 로 표시돼 있어서 컴파일 시
+  경고(CS0618)가 뜰 수 있는데 **에러는 아니고 정상 동작한다** — 기존 사이트 코드도 이미 이 상태일 것이다.
 * **데이터 삭제용 커넥션(MoldConnectionString)과 별개의 커넥션**을 새로 연다. 삭제 트랜잭션과
   무관하므로 메일이 실패해도 삭제는 이미 커밋되어 있고, 반대로 메일 때문에 삭제가 롤백되지도 않는다.
 * `MAIL_CONSTR_KEY`, `GetDeletedValue`, `SendDeletedMoldMail` 같은 이름이 기존(보이지 않는)
@@ -275,6 +289,10 @@ AS322_______________0000HA34Y47.0000
 * **UTL_MAIL 사용 가능 여부** : 두 DB 다 이미 다른 모드에서 `UTL_MAIL.SEND` 를 쓰고 있으므로
   패키지 설치, `SMTP_OUT_SERVER` 파라미터, ACL 은 이미 되어 있다. 추가 작업 없음.
 * **권한** : 웹에서 쓰는 계정이 `rts` (프로시저 소유자) 이므로 별도 GRANT 불필요.
+* **SIP 쪽 비밀번호 대소문자** : `rtsSIPConnectionString` 은 새로 추가하는 항목이라, 배포 전 SIPPRD 의
+  `rts` 계정 비밀번호 대소문자(요청하신 값은 `rts4sck0`)를 한 번 더 확인하는 게 안전하다.
+  (기존 SCK `rtsConnectionString` 은 `RTS4sck0` 로 등록돼 있어 대소문자가 다르게 보임 — Oracle 계정
+  비밀번호는 DB 설정에 따라 대소문자를 구분할 수 있다)
 * 삭제가 실패하면(`e.AffectedRows = 0`) 메일이 나가지 않는다.
 * 메일 발송이 실패해도 삭제는 이미 완료된 상태로 유지된다 (`try/catch` 로 흡수, Trace 에만 기록).
 * 삭제자(사번), 삭제 시각, SITE 를 메일 본문에 같이 넣고 싶으면

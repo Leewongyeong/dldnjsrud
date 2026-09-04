@@ -2,7 +2,8 @@
 //  Mold_SIP.aspx.cs  (Data_modify.Mold_SIP)  - "추가할 부분"만 정리한 파일입니다.
 //  기존 Mold_SIP.aspx.cs 를 그대로 두고, 아래 내용만 클래스 안에 붙여넣으세요.
 //
-//  대상 DB   : SIPPRD           (web.config appSettings key : _CONSTR_RTS_SIPPRD)
+//  대상 DB   : SIPPRD  (web.config connectionStrings name : rtsSIPConnectionString)
+//              System.Data.OracleClient Provider 사용 (ODP.NET/Devart 아님, 실제 web.config 로 확인됨)
 //  호출 PROC : RTS.KSY_SEND_MAIL('MOLD_DEL:' + EQUIP_ID + '|' + LOT_ID)
 //==========================================================================================
 
@@ -12,8 +13,7 @@ using System.Configuration;
 using System.Data;
 using System.Web;
 using System.Web.UI.WebControls;
-using Oracle.DataAccess.Client;   // ※ 사이트에서 쓰는 Oracle Provider 에 맞추세요.
-                                  //    Devart 면 using Devart.Data.Oracle;
+using System.Data.OracleClient;   // 이 사이트는 System.Data.OracleClient(구 MS 내장 드라이버) 사용
 
 namespace Data_modify
 {
@@ -22,7 +22,7 @@ namespace Data_modify
         // ---- 2) 아래 상수 2개 + 메서드 3개를 기존 클래스 안에 그대로 붙여넣기 --------
 
         /// <summary>메일 발송 프로시저(RTS.KSY_SEND_MAIL)가 있는 DB 접속 문자열 key</summary>
-        private const string MAIL_CONSTR_KEY = "_CONSTR_RTS_SIPPRD";
+        private const string MAIL_CONSTR_KEY = "rtsSIPConnectionString";
 
         /// <summary>RTS.KSY_SEND_MAIL 에 추가한 P_MODE prefix</summary>
         private const string MAIL_MODE = "MOLD_DEL:";
@@ -89,17 +89,11 @@ namespace Data_modify
         /// <summary>RTS.KSY_SEND_MAIL 프로시저를 호출해서 Auto Mail 을 발송한다.</summary>
         private static void SendDeletedMoldMail(string equipId, string lotId)
         {
-            string connStr = ConfigurationManager.AppSettings[MAIL_CONSTR_KEY];
+            ConnectionStringSettings setting = ConfigurationManager.ConnectionStrings[MAIL_CONSTR_KEY];
 
-            if (string.IsNullOrEmpty(connStr)
-                && ConfigurationManager.ConnectionStrings[MAIL_CONSTR_KEY] != null)
+            if (setting == null)
             {
-                connStr = ConfigurationManager.ConnectionStrings[MAIL_CONSTR_KEY].ConnectionString;
-            }
-
-            if (string.IsNullOrEmpty(connStr))
-            {
-                throw new ConfigurationErrorsException(MAIL_CONSTR_KEY + " 가 web.config 에 없습니다.");
+                throw new ConfigurationErrorsException(MAIL_CONSTR_KEY + " 가 web.config <connectionStrings> 에 없습니다.");
             }
 
             // 구분자로 쓰는 '|' , ';' 가 값에 섞이면 프로시저 파싱이 깨지므로 제거한다.
@@ -108,7 +102,7 @@ namespace Data_modify
                          + "|"
                          + lotId.Replace("|", "").Replace(";", "");
 
-            using (OracleConnection conn = new OracleConnection(connStr))
+            using (OracleConnection conn = new OracleConnection(setting.ConnectionString))
             using (OracleCommand cmd = new OracleCommand("RTS.KSY_SEND_MAIL", conn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;

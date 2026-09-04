@@ -4,7 +4,7 @@
 <%@ Import Namespace="System.Web" %>
 <%@ Import Namespace="System.Web.UI.WebControls" %>
 <%@ Import Namespace="System.Configuration" %>
-<%@ Import Namespace="Oracle.DataAccess.Client" %>
+<%@ Import Namespace="System.Data.OracleClient" %>
 <script runat="server">
 
     // ------------------------------------------------------------------
@@ -14,9 +14,12 @@
     //  Inherits="Data_modify.Mold" 를 상속하는 클래스로 동적 컴파일하므로,
     //  여기 작성한 메서드가 그 파생 클래스의 멤버로 그대로 포함된다.
     //  (기존 배포된 Mold.aspx.cs/DLL 은 전혀 건드리지 않는다)
+    //
+    //  실제 web.config 를 확인한 결과 이 사이트는 System.Data.OracleClient(구 MS 내장 드라이버)
+    //  + <connectionStrings> 방식을 쓴다 (appSettings 아님). MoldConnectionString 등과 동일한 방식.
     // ------------------------------------------------------------------
 
-    private const string MAIL_CONSTR_KEY = "_CONSTR_RTS_SCKCIMDWH";
+    private const string MAIL_CONSTR_KEY = "rtsConnectionString";
     private const string MAIL_MODE = "MOLD_DEL:";
 
     protected void GridView1_RowDeleted(object sender, GridViewDeletedEventArgs e)
@@ -68,17 +71,11 @@
 
     private static void SendDeletedMoldMail(string equipId, string lotId)
     {
-        string connStr = ConfigurationManager.AppSettings[MAIL_CONSTR_KEY];
+        ConnectionStringSettings setting = ConfigurationManager.ConnectionStrings[MAIL_CONSTR_KEY];
 
-        if (string.IsNullOrEmpty(connStr)
-            && ConfigurationManager.ConnectionStrings[MAIL_CONSTR_KEY] != null)
+        if (setting == null)
         {
-            connStr = ConfigurationManager.ConnectionStrings[MAIL_CONSTR_KEY].ConnectionString;
-        }
-
-        if (string.IsNullOrEmpty(connStr))
-        {
-            throw new ConfigurationErrorsException(MAIL_CONSTR_KEY + " 가 web.config 에 없습니다.");
+            throw new ConfigurationErrorsException(MAIL_CONSTR_KEY + " 가 web.config <connectionStrings> 에 없습니다.");
         }
 
         string pMode = MAIL_MODE
@@ -86,7 +83,7 @@
                      + "|"
                      + lotId.Replace("|", "").Replace(";", "");
 
-        using (OracleConnection conn = new OracleConnection(connStr))
+        using (OracleConnection conn = new OracleConnection(setting.ConnectionString))
         using (OracleCommand cmd = new OracleCommand("RTS.KSY_SEND_MAIL", conn))
         {
             cmd.CommandType = CommandType.StoredProcedure;
