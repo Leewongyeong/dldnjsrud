@@ -845,31 +845,56 @@
 
                                         <h5 style="color: #438EB9" id="title_material_information_qa" runat="server">Material Information</h5>
                                         <div class="row" style="margin-top: 10px;">
+                                            <%-- System1~4 + Lid, Head1/Head2 매트릭스
+                                                 (장비 1대당 Head 가 2개씩 있어 자재를 Head 별로 따로 관리) --%>
                                             <table class="table table-lotInfo use-head" id="tb_material_information_qa" runat="server">
                                                 <colgroup>
                                                     <col style="width: 14%; background-color: #f6f6f6;" />
-                                                    <col style="width: 17.2%;" />
-                                                    <col style="width: 17.2%;" />
-                                                    <col style="width: 17.2%;" />
-                                                    <col style="width: 17.2%;" />
-                                                    <col style="width: 17.2%;" />
+                                                    <col style="width: 8.6%;" />
+                                                    <col style="width: 8.6%;" />
+                                                    <col style="width: 8.6%;" />
+                                                    <col style="width: 8.6%;" />
+                                                    <col style="width: 8.6%;" />
+                                                    <col style="width: 8.6%;" />
+                                                    <col style="width: 8.6%;" />
+                                                    <col style="width: 8.6%;" />
+                                                    <col style="width: 8.6%;" />
+                                                    <col style="width: 8.6%;" />
                                                 </colgroup>
                                                 <tbody>
                                                     <tr>
                                                         <th></th>
-                                                        <th style="text-align:center;">System1</th>
-                                                        <th style="text-align:center;">System2</th>
-                                                        <th style="text-align:center;">System3</th>
-                                                        <th style="text-align:center;">System4</th>
-                                                        <th style="text-align:center;">Lid</th>
+                                                        <th colspan="2" style="text-align:center;">System1</th>
+                                                        <th colspan="2" style="text-align:center;">System2</th>
+                                                        <th colspan="2" style="text-align:center;">System3</th>
+                                                        <th colspan="2" style="text-align:center;">System4</th>
+                                                        <th colspan="2" style="text-align:center;">Lid</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th style="text-align:center;">Head 1</th>
+                                                        <th style="text-align:center;">Head 2</th>
+                                                        <th style="text-align:center;">Head 1</th>
+                                                        <th style="text-align:center;">Head 2</th>
+                                                        <th style="text-align:center;">Head 1</th>
+                                                        <th style="text-align:center;">Head 2</th>
+                                                        <th style="text-align:center;">Head 1</th>
+                                                        <th style="text-align:center;">Head 2</th>
+                                                        <th style="text-align:center;">Head 1</th>
+                                                        <th style="text-align:center;">Head 2</th>
                                                     </tr>
                                                     <tr>
                                                         <th>Information</th>
                                                         <td><asp:TextBox ID="txt_sys1_information_qa" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
+                                                        <td><asp:TextBox ID="txt_sys1_information_qa_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
                                                         <td><asp:TextBox ID="txt_sys2_information_qa" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
+                                                        <td><asp:TextBox ID="txt_sys2_information_qa_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
                                                         <td><asp:TextBox ID="txt_sys3_information_qa" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
+                                                        <td><asp:TextBox ID="txt_sys3_information_qa_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
                                                         <td><asp:TextBox ID="txt_sys4_information_qa" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
+                                                        <td><asp:TextBox ID="txt_sys4_information_qa_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
                                                         <td><asp:TextBox ID="txt_lid_information_qa" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
+                                                        <td><asp:TextBox ID="txt_lid_information_qa_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Batch No</th>
@@ -878,35 +903,64 @@
                                                             <asp:Button class="btn btn-add btn-xs btn-inverse" ID="btn_sys1_na_qa" runat="server" Width="30%" Text="N/A" OnClick="btn_sys1_na_qa_Click" />
                                                         </td>
                                                         <td>
+                                                            <asp:TextBox ID="txt_sys1_batch_no_qa_h2" runat="server" class="form-control" Style="width:65%;display:inline-block;text-transform:uppercase;" AutoPostBack="True" OnTextChanged="txt_sys1_batch_no_qa_h2_TextChanged" />
+                                                            <asp:Button class="btn btn-add btn-xs btn-inverse" ID="btn_sys1_na_qa_h2" runat="server" Width="30%" Text="N/A" OnClick="btn_sys1_na_qa_h2_Click" />
+                                                        </td>
+                                                        <td>
                                                             <asp:TextBox ID="txt_sys2_batch_no_qa" runat="server" class="form-control" Style="width:65%;display:inline-block;text-transform:uppercase;" AutoPostBack="True" OnTextChanged="txt_sys2_batch_no_qa_TextChanged" />
                                                             <asp:Button class="btn btn-add btn-xs btn-inverse" ID="btn_sys2_na_qa" runat="server" Width="30%" Text="N/A" OnClick="btn_sys2_na_qa_Click" />
+                                                        </td>
+                                                        <td>
+                                                            <asp:TextBox ID="txt_sys2_batch_no_qa_h2" runat="server" class="form-control" Style="width:65%;display:inline-block;text-transform:uppercase;" AutoPostBack="True" OnTextChanged="txt_sys2_batch_no_qa_h2_TextChanged" />
+                                                            <asp:Button class="btn btn-add btn-xs btn-inverse" ID="btn_sys2_na_qa_h2" runat="server" Width="30%" Text="N/A" OnClick="btn_sys2_na_qa_h2_Click" />
                                                         </td>
                                                         <td>
                                                             <asp:TextBox ID="txt_sys3_batch_no_qa" runat="server" class="form-control" Style="width:65%;display:inline-block;text-transform:uppercase;" AutoPostBack="True" OnTextChanged="txt_sys3_batch_no_qa_TextChanged" />
                                                             <asp:Button class="btn btn-add btn-xs btn-inverse" ID="btn_sys3_na_qa" runat="server" Width="30%" Text="N/A" OnClick="btn_sys3_na_qa_Click" />
                                                         </td>
                                                         <td>
+                                                            <asp:TextBox ID="txt_sys3_batch_no_qa_h2" runat="server" class="form-control" Style="width:65%;display:inline-block;text-transform:uppercase;" AutoPostBack="True" OnTextChanged="txt_sys3_batch_no_qa_h2_TextChanged" />
+                                                            <asp:Button class="btn btn-add btn-xs btn-inverse" ID="btn_sys3_na_qa_h2" runat="server" Width="30%" Text="N/A" OnClick="btn_sys3_na_qa_h2_Click" />
+                                                        </td>
+                                                        <td>
                                                             <asp:TextBox ID="txt_sys4_batch_no_qa" runat="server" class="form-control" Style="width:65%;display:inline-block;text-transform:uppercase;" AutoPostBack="True" OnTextChanged="txt_sys4_batch_no_qa_TextChanged" />
                                                             <asp:Button class="btn btn-add btn-xs btn-inverse" ID="btn_sys4_na_qa" runat="server" Width="30%" Text="N/A" OnClick="btn_sys4_na_qa_Click" />
                                                         </td>
                                                         <td>
+                                                            <asp:TextBox ID="txt_sys4_batch_no_qa_h2" runat="server" class="form-control" Style="width:65%;display:inline-block;text-transform:uppercase;" AutoPostBack="True" OnTextChanged="txt_sys4_batch_no_qa_h2_TextChanged" />
+                                                            <asp:Button class="btn btn-add btn-xs btn-inverse" ID="btn_sys4_na_qa_h2" runat="server" Width="30%" Text="N/A" OnClick="btn_sys4_na_qa_h2_Click" />
+                                                        </td>
+                                                        <td>
                                                             <asp:TextBox ID="txt_lid_batch_no_qa" runat="server" class="form-control" Style="text-transform: uppercase;" AutoPostBack="True" OnTextChanged="txt_lid_batch_no_qa_TextChanged" />
+                                                        </td>
+                                                        <td>
+                                                            <asp:TextBox ID="txt_lid_batch_no_qa_h2" runat="server" class="form-control" Style="text-transform: uppercase;" AutoPostBack="True" OnTextChanged="txt_lid_batch_no_qa_h2_TextChanged" />
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <th>SAP Code</th>
                                                         <td><asp:TextBox ID="txt_sys1_sap_code_qa" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
+                                                        <td><asp:TextBox ID="txt_sys1_sap_code_qa_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
                                                         <td><asp:TextBox ID="txt_sys2_sap_code_qa" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
+                                                        <td><asp:TextBox ID="txt_sys2_sap_code_qa_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
                                                         <td><asp:TextBox ID="txt_sys3_sap_code_qa" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
+                                                        <td><asp:TextBox ID="txt_sys3_sap_code_qa_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
                                                         <td><asp:TextBox ID="txt_sys4_sap_code_qa" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
+                                                        <td><asp:TextBox ID="txt_sys4_sap_code_qa_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
+                                                        <td></td>
                                                         <td></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Expire Time</th>
                                                         <td><telerik:RadDateTimePicker ID="tp_sys1_expire_time_qa" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
+                                                        <td><telerik:RadDateTimePicker ID="tp_sys1_expire_time_qa_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
                                                         <td><telerik:RadDateTimePicker ID="tp_sys2_expire_time_qa" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
+                                                        <td><telerik:RadDateTimePicker ID="tp_sys2_expire_time_qa_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
                                                         <td><telerik:RadDateTimePicker ID="tp_sys3_expire_time_qa" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
+                                                        <td><telerik:RadDateTimePicker ID="tp_sys3_expire_time_qa_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
                                                         <td><telerik:RadDateTimePicker ID="tp_sys4_expire_time_qa" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
+                                                        <td><telerik:RadDateTimePicker ID="tp_sys4_expire_time_qa_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
+                                                        <td></td>
                                                         <td></td>
                                                     </tr>
                                                 </tbody>
