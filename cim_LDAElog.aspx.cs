@@ -1240,8 +1240,12 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
         catch (Exception ex)
         {
             // 조회 실패를 조용히 삼키면 "결과 0건" 과 구분되지 않으므로 사유를 알린다.
+            // 예외 타입 / InnerException 까지 보여줘야 다음에 실패해도 바로 원인을 짚을 수 있다.
             rgv_List.DataSource = new DataTable();
-            ShowAlert("조회 실패: " + ex.Message);
+            string detail = "조회 실패 [" + ex.GetType().Name + "]: " + ex.Message;
+            if (ex.InnerException != null)
+                detail += " / Inner[" + ex.InnerException.GetType().Name + "]: " + ex.InnerException.Message;
+            ShowAlert(detail);
         }
     }
 
@@ -1281,9 +1285,18 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
 
         SQL += " ORDER BY CREATED_TIME DESC";
 
-        DataSet ds = SQL_HELPER.SqlHelper.ExecuteDataset(LibSys.SCK_RTS, CommandType.Text, SQL);
-        if (ds == null || ds.Tables.Count == 0) return new DataTable();
-        return ds.Tables[0];
+        // SQL_HELPER.SqlHelper.ExecuteDataset 대신, 이 파일의 다른 조회 메서드들
+        // (GetHeatSinkBatchInfo 등)에서 이미 검증된 OracleConnection/OracleDataAdapter 패턴을 쓴다.
+        DataTable dtReturn = new DataTable();
+        using (OracleConnection oc = new OracleConnection(LibSys.SCK_RTS))
+        {
+            oc.Open();
+            using (OracleDataAdapter da = new OracleDataAdapter(SQL, oc))
+            {
+                da.Fill(dtReturn);
+            }
+        }
+        return dtReturn;
     }
 
     /// <summary>문자열을 SQL 리터럴로 만든다. (작은따옴표 이스케이프)</summary>
