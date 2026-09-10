@@ -18,6 +18,36 @@
 
 
 -- ------------------------------------------------------------------------------------------------------
+-- STEP -1. 사전 점검 (읽기 전용 — 실행해도 아무 것도 바뀌지 않는다)
+--    STEP 3 에서 실제로 몇 건이, 어떤 값으로 옮겨지는지 미리 확인하고 싶을 때 먼저 돌려보세요.
+-- ------------------------------------------------------------------------------------------------------
+
+-- QA 행 중 옛 QA 전용 컬럼에 값이 들어있는 건수 (이 건수만큼 STEP 3 에서 백필됨)
+SELECT COUNT(*) AS QA_ROWS_TOTAL,
+       COUNT(QA_SYS2_INFO)        AS QA_SYS2_INFO_필사용,
+       COUNT(QA_SYS2_BATCH_NO)    AS QA_SYS2_BATCH_NO_필사용,
+       COUNT(QA_SYS2_SAP_CODE)    AS QA_SYS2_SAP_CODE_필사용,
+       COUNT(QA_SYS2_EXPIRE_TIME) AS QA_SYS2_EXPIRE_TIME_필사용,
+       COUNT(QA_SYS5_BATCH_NO)    AS QA_SYS5_BATCH_NO_필사용
+FROM   RTS.LDA_ELOGSHEET
+WHERE  ELOGSHEET_TYPE = 'QA';
+
+-- 옮겨질 값을 실제로 눈으로 확인하고 싶으면 (최근 20건만)
+SELECT SEQ, LOT_ID, CREATED_TIME,
+       QA_SYS2_INFO, QA_SYS2_BATCH_NO, QA_SYS2_SAP_CODE, QA_SYS2_EXPIRE_TIME, QA_SYS5_BATCH_NO
+FROM   RTS.LDA_ELOGSHEET
+WHERE  ELOGSHEET_TYPE = 'QA'
+AND  ( QA_SYS2_INFO IS NOT NULL OR QA_SYS2_BATCH_NO IS NOT NULL
+    OR QA_SYS2_SAP_CODE IS NOT NULL OR QA_SYS2_EXPIRE_TIME IS NOT NULL
+    OR QA_SYS5_BATCH_NO IS NOT NULL )
+ORDER BY CREATED_TIME DESC
+FETCH FIRST 20 ROWS ONLY;
+
+-- 참고: System3/4(QA_SYS3_*, QA_SYS4_*)는 STEP 2 에서 RENAME 만 하므로 데이터가 몇 건이든
+-- 안전합니다 — 값을 옮기는 게 아니라 컬럼 이름표만 바꾸는 것이라 백필 대상이 아닙니다.
+
+
+-- ------------------------------------------------------------------------------------------------------
 -- STEP 0. 백업 (되돌릴 수 있도록 원본 테이블을 통째로 복사해 둔다)
 -- ------------------------------------------------------------------------------------------------------
 CREATE TABLE RTS.LDA_ELOGSHEET_BAK_20260910 AS
