@@ -1260,6 +1260,29 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
     /// 조회 조건으로 RTS.LDA_ELOGSHEET 를 검색한다.
     /// 입력하지 않은 조건은 WHERE 절에서 제외되므로, 아무것도 입력하지 않으면 전체가 조회된다.
     /// </summary>
+    /// <summary>
+    /// RTS.LDA_ELOGSHEET 의 전체 컬럼을 명시적으로 나열한 목록.
+    /// SELECT * 를 쓰면 DbDataAdapter.Fill() 에서 IndexOutOfRangeException 이 재현되어
+    /// (데이터가 0건인 상태에서도 발생 — 스키마 처리 단계의 문제로 판단) 명시적 컬럼 나열로 바꿨다.
+    /// DataKeyNames="SEQ" 때문에 화면에 안 보이는 SEQ 도 반드시 포함해야 한다.
+    /// 테이블에 컬럼을 추가/삭제하면 이 목록도 함께 갱신해야 한다.
+    /// </summary>
+    private const string SELECT_COLUMNS =
+        "  SEQ, ELOGSHEET_TYPE, SHEET_TYPE, SHIFT, INPUT_TIME, LOT_ID," +
+        "  CUST_NAME, PKG, LEAD, CUST_DEVICE, NICK, QTY," +
+        "  EQUIP_ID, OPER_CODE, RECIPE_NAME, AI_NO, USER_ID, USER_NAME," +
+        "  SYS2_INFO, SYS2_BATCH_NO, SYS2_SAP_CODE, SYS2_EXPIRE_TIME, SYS5_BATCH_NO, SYS1_DISPENSING_PATTERN," +
+        "  SYS2_DISPENSING_PATTERN, COVERAGE_DETACH, TILT_PROD, POSITION_PROD, TCARD_AND_AI_CHECK, SYS1_NEEDLE_SN," +
+        "  SYS1_NEEDLE_SIZE, SYS2_NEEDLE_SN, SYS2_NEEDLE_SIZE, PICKUP_TOOL, PCB_REVERSE_DETECT_CHECK, BONDING_FORCE," +
+        "  DELAY_TIME, PCB_MAGAZINE_LOAD_UNLOAD_CHECK, MODE_2DID, SYS1_INFO, SYS1_BATCH_NO, SYS1_SAP_CODE," +
+        "  SYS1_EXPIRE_TIME, SYS3_INFO, SYS3_BATCH_NO, SYS3_SAP_CODE, SYS3_EXPIRE_TIME, SYS4_INFO," +
+        "  SYS4_BATCH_NO, SYS4_SAP_CODE, SYS4_EXPIRE_TIME, SYS5_INFO, QA_SYS1_PATTERN, QA_SYS2_PATTERN," +
+        "  QA_DUMMY_COVERAGE, QA_DUMMY_COVERAGE_TYPE, QA_STRIP_NO, QA_VISUAL, QA_VISUAL_TYPE, BUY_OFF_RESULT," +
+        "  REMARK, CREATED_TIME, PCB_BACK_SIDE_SCRATCH_CHECK, PUSHER_POSITION_CHECK, SYS1_INFO_2, SYS1_BATCH_NO_2," +
+        "  SYS1_SAP_CODE_2, SYS1_EXPIRE_TIME_2, SYS2_INFO_2, SYS2_BATCH_NO_2, SYS2_SAP_CODE_2, SYS2_EXPIRE_TIME_2," +
+        "  SYS3_INFO_2, SYS3_BATCH_NO_2, SYS3_SAP_CODE_2, SYS3_EXPIRE_TIME_2, SYS4_INFO_2, SYS4_BATCH_NO_2," +
+        "  SYS4_SAP_CODE_2, SYS4_EXPIRE_TIME_2, SYS5_INFO_2, SYS5_BATCH_NO_2";
+
     public static DataTable LDAElog_Open_Data(DateTime? date_fr, DateTime? date_to,
         string lot_id, string mc_no, string userID, string recipe_name,
         string custormer, string device, string elogsheet)
@@ -1275,7 +1298,7 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
             date_to = swap;
         }
 
-        string SQL = "SELECT * FROM RTS.LDA_ELOGSHEET WHERE ELOGSHEET_TYPE = " + ToSqlText(sheetType);
+        string SQL = "SELECT " + SELECT_COLUMNS + " FROM RTS.LDA_ELOGSHEET WHERE ELOGSHEET_TYPE = " + ToSqlText(sheetType);
 
         // CREATED_TIME 에는 시분초가 들어있으므로 To 로 지정한 날짜의 하루 전체를 포함시킨다.
         if (date_fr.HasValue)
