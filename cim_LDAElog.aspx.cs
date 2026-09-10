@@ -196,24 +196,42 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                 AddGridColumn("NICK", "Nick");
                 AddGridColumn("QTY", "Qty");
                 AddGridColumn("AI_NO", "AI");
-                AddGridColumn("SYS1_INFO", "System1 Info");
-                AddGridColumn("SYS1_BATCH_NO", "System1 Batch No");
-                AddGridColumn("SYS1_SAP_CODE", "System1 SAP Code");
-                AddGridColumn("SYS1_EXPIRE_TIME", "System1 Expire Time");
-                AddGridColumn("SYS2_INFO", "System2 Info");
-                AddGridColumn("SYS2_BATCH_NO", "System2 Batch No");
-                AddGridColumn("SYS2_SAP_CODE", "System2 SAP Code");
-                AddGridColumn("SYS2_EXPIRE_TIME", "System2 Expire Time");
-                AddGridColumn("QA_SYS3_INFO", "System3 Info");
-                AddGridColumn("QA_SYS3_BATCH_NO", "System3 Batch No");
-                AddGridColumn("QA_SYS3_SAP_CODE", "System3 SAP Code");
-                AddGridColumn("QA_SYS3_EXPIRE_TIME", "System3 Expire Time");
-                AddGridColumn("QA_SYS4_INFO", "System4 Info");
-                AddGridColumn("QA_SYS4_BATCH_NO", "System4 Batch No");
-                AddGridColumn("QA_SYS4_SAP_CODE", "System4 SAP Code");
-                AddGridColumn("QA_SYS4_EXPIRE_TIME", "System4 Expire Time");
-                AddGridColumn("SYS5_INFO", "Lid Info");
-                AddGridColumn("SYS5_BATCH_NO", "Lid Batch No");
+                AddGridColumn("SYS1_INFO", "System1 Info (Head1)");
+                AddGridColumn("SYS1_BATCH_NO", "System1 Batch No (Head1)");
+                AddGridColumn("SYS1_SAP_CODE", "System1 SAP Code (Head1)");
+                AddGridColumn("SYS1_EXPIRE_TIME", "System1 Expire Time (Head1)");
+                AddGridColumn("SYS1_INFO_2", "System1 Info (Head2)");
+                AddGridColumn("SYS1_BATCH_NO_2", "System1 Batch No (Head2)");
+                AddGridColumn("SYS1_SAP_CODE_2", "System1 SAP Code (Head2)");
+                AddGridColumn("SYS1_EXPIRE_TIME_2", "System1 Expire Time (Head2)");
+                AddGridColumn("SYS2_INFO", "System2 Info (Head1)");
+                AddGridColumn("SYS2_BATCH_NO", "System2 Batch No (Head1)");
+                AddGridColumn("SYS2_SAP_CODE", "System2 SAP Code (Head1)");
+                AddGridColumn("SYS2_EXPIRE_TIME", "System2 Expire Time (Head1)");
+                AddGridColumn("SYS2_INFO_2", "System2 Info (Head2)");
+                AddGridColumn("SYS2_BATCH_NO_2", "System2 Batch No (Head2)");
+                AddGridColumn("SYS2_SAP_CODE_2", "System2 SAP Code (Head2)");
+                AddGridColumn("SYS2_EXPIRE_TIME_2", "System2 Expire Time (Head2)");
+                AddGridColumn("QA_SYS3_INFO", "System3 Info (Head1)");
+                AddGridColumn("QA_SYS3_BATCH_NO", "System3 Batch No (Head1)");
+                AddGridColumn("QA_SYS3_SAP_CODE", "System3 SAP Code (Head1)");
+                AddGridColumn("QA_SYS3_EXPIRE_TIME", "System3 Expire Time (Head1)");
+                AddGridColumn("QA_SYS3_INFO_2", "System3 Info (Head2)");
+                AddGridColumn("QA_SYS3_BATCH_NO_2", "System3 Batch No (Head2)");
+                AddGridColumn("QA_SYS3_SAP_CODE_2", "System3 SAP Code (Head2)");
+                AddGridColumn("QA_SYS3_EXPIRE_TIME_2", "System3 Expire Time (Head2)");
+                AddGridColumn("QA_SYS4_INFO", "System4 Info (Head1)");
+                AddGridColumn("QA_SYS4_BATCH_NO", "System4 Batch No (Head1)");
+                AddGridColumn("QA_SYS4_SAP_CODE", "System4 SAP Code (Head1)");
+                AddGridColumn("QA_SYS4_EXPIRE_TIME", "System4 Expire Time (Head1)");
+                AddGridColumn("QA_SYS4_INFO_2", "System4 Info (Head2)");
+                AddGridColumn("QA_SYS4_BATCH_NO_2", "System4 Batch No (Head2)");
+                AddGridColumn("QA_SYS4_SAP_CODE_2", "System4 SAP Code (Head2)");
+                AddGridColumn("QA_SYS4_EXPIRE_TIME_2", "System4 Expire Time (Head2)");
+                AddGridColumn("SYS5_INFO", "Lid Info (Head1)");
+                AddGridColumn("SYS5_BATCH_NO", "Lid Batch No (Head1)");
+                AddGridColumn("SYS5_INFO_2", "Lid Info (Head2)");
+                AddGridColumn("SYS5_BATCH_NO_2", "Lid Batch No (Head2)");
                 AddGridColumn("SYS1_NEEDLE_SN", "TIM Needle S/N");
                 AddGridColumn("SYS1_NEEDLE_SIZE", "TIM Needle Size");
                 AddGridColumn("SYS2_NEEDLE_SN", "Glue Needle S/N");
@@ -358,6 +376,15 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
             tp_sys2_expire_prd.SelectedDate = null;
             tp_sys3_expire_prd.SelectedDate = null;
             tp_sys4_expire_prd.SelectedDate = null;
+
+            // Head2
+            txt_sys1_info_prd_h2.Text = txt_sys2_info_prd_h2.Text = txt_sys3_info_prd_h2.Text = txt_sys4_info_prd_h2.Text = txt_lid_info_prd_h2.Text = string.Empty;
+            txt_sys1_batch_prd_h2.Text = txt_sys2_batch_prd_h2.Text = txt_sys3_batch_prd_h2.Text = txt_sys4_batch_prd_h2.Text = txt_lid_batch_prd_h2.Text = string.Empty;
+            txt_sys1_sap_prd_h2.Text = txt_sys2_sap_prd_h2.Text = txt_sys3_sap_prd_h2.Text = txt_sys4_sap_prd_h2.Text = string.Empty;
+            tp_sys1_expire_prd_h2.SelectedDate = null;
+            tp_sys2_expire_prd_h2.SelectedDate = null;
+            tp_sys3_expire_prd_h2.SelectedDate = null;
+            tp_sys4_expire_prd_h2.SelectedDate = null;
         }
     }
 
@@ -494,6 +521,69 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
         }
     }
 
+    #region PRD Head2 (장비 1대당 Head 2개 대응)
+
+    protected void txt_sys1_batch_prd_h2_TextChanged(object sender, EventArgs e)
+    {
+        if (txt_sys1_batch_prd_h2.Text == "") { txt_sys1_info_prd_h2.Text = txt_sys1_sap_prd_h2.Text = string.Empty; return; }
+        LookupSysBatchNo_Prd(txt_sys1_batch_prd_h2.Text, txt_sys1_info_prd_h2, txt_sys1_sap_prd_h2);
+    }
+
+    protected void txt_sys2_batch_prd_h2_TextChanged(object sender, EventArgs e)
+    {
+        if (txt_sys2_batch_prd_h2.Text == "") { txt_sys2_info_prd_h2.Text = txt_sys2_sap_prd_h2.Text = string.Empty; return; }
+        LookupSysBatchNo_Prd(txt_sys2_batch_prd_h2.Text, txt_sys2_info_prd_h2, txt_sys2_sap_prd_h2);
+    }
+
+    protected void txt_sys3_batch_prd_h2_TextChanged(object sender, EventArgs e)
+    {
+        if (txt_sys3_batch_prd_h2.Text == "") { txt_sys3_info_prd_h2.Text = txt_sys3_sap_prd_h2.Text = string.Empty; return; }
+        LookupSysBatchNo_Prd(txt_sys3_batch_prd_h2.Text, txt_sys3_info_prd_h2, txt_sys3_sap_prd_h2);
+    }
+
+    protected void txt_sys4_batch_prd_h2_TextChanged(object sender, EventArgs e)
+    {
+        if (txt_sys4_batch_prd_h2.Text == "") { txt_sys4_info_prd_h2.Text = txt_sys4_sap_prd_h2.Text = string.Empty; return; }
+        LookupSysBatchNo_Prd(txt_sys4_batch_prd_h2.Text, txt_sys4_info_prd_h2, txt_sys4_sap_prd_h2);
+    }
+
+    protected void btn_sys1_na_prd_h2_Click(object sender, EventArgs e) { txt_sys1_batch_prd_h2.Text = "N/A"; txt_sys1_info_prd_h2.Text = txt_sys1_sap_prd_h2.Text = string.Empty; }
+    protected void btn_sys2_na_prd_h2_Click(object sender, EventArgs e) { txt_sys2_batch_prd_h2.Text = "N/A"; txt_sys2_info_prd_h2.Text = txt_sys2_sap_prd_h2.Text = string.Empty; }
+    protected void btn_sys3_na_prd_h2_Click(object sender, EventArgs e) { txt_sys3_batch_prd_h2.Text = "N/A"; txt_sys3_info_prd_h2.Text = txt_sys3_sap_prd_h2.Text = string.Empty; }
+    protected void btn_sys4_na_prd_h2_Click(object sender, EventArgs e) { txt_sys4_batch_prd_h2.Text = "N/A"; txt_sys4_info_prd_h2.Text = txt_sys4_sap_prd_h2.Text = string.Empty; }
+
+    protected void txt_lid_batch_prd_h2_TextChanged(object sender, EventArgs e)
+    {
+        if (txt_LotId_prd.Text == "")
+        {
+            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ERROR", "alert('LOT ID를 먼저 입력하세요.');", true);
+            txt_lid_batch_prd_h2.Text = "";
+            return;
+        }
+        try
+        {
+            string BATCH = txt_lid_batch_prd_h2.Text.ToUpper();
+            if (BATCH.Contains("/")) BATCH = BATCH.Split('/')[1];
+
+            DataTable batchID = GetHeatSinkBatchInfo(BATCH);
+            if (batchID == null || batchID.Rows.Count == 0)
+            {
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ERROR", "alert('잘못된 Lid BATCH NO 입니다.');", true);
+                txt_lid_batch_prd_h2.Text = string.Empty;
+                return;
+            }
+            txt_lid_batch_prd_h2.Text = batchID.Rows[0]["BATCH_NO"].ToString();
+            txt_lid_info_prd_h2.Text = batchID.Rows[0]["MATL_CODE"].ToString();
+        }
+        catch
+        {
+            txt_lid_batch_prd_h2.Text = string.Empty;
+            txt_lid_info_prd_h2.Text = string.Empty;
+        }
+    }
+
+    #endregion
+
     protected void btn_save_prd_Click(object sender, EventArgs e)
     {
         if (ddl_McNo_prd.SelectedItem == null || ddl_McNo_prd.SelectedItem.Value == string.Empty)
@@ -511,10 +601,15 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                     " (SEQ, ELOGSHEET_TYPE, SHEET_TYPE, SHIFT, INPUT_TIME, LOT_ID, CUST_NAME, PKG, LEAD, CUST_DEVICE, NICK, QTY," +
                     "  EQUIP_ID, OPER_CODE, RECIPE_NAME, AI_NO, USER_ID," +
                     "  SYS1_INFO, SYS1_BATCH_NO, SYS1_SAP_CODE, SYS1_EXPIRE_TIME," +
+                    "  SYS1_INFO_2, SYS1_BATCH_NO_2, SYS1_SAP_CODE_2, SYS1_EXPIRE_TIME_2," +
                     "  SYS2_INFO, SYS2_BATCH_NO, SYS2_SAP_CODE, SYS2_EXPIRE_TIME," +
+                    "  SYS2_INFO_2, SYS2_BATCH_NO_2, SYS2_SAP_CODE_2, SYS2_EXPIRE_TIME_2," +
                     "  QA_SYS3_INFO, QA_SYS3_BATCH_NO, QA_SYS3_SAP_CODE, QA_SYS3_EXPIRE_TIME," +
+                    "  QA_SYS3_INFO_2, QA_SYS3_BATCH_NO_2, QA_SYS3_SAP_CODE_2, QA_SYS3_EXPIRE_TIME_2," +
                     "  QA_SYS4_INFO, QA_SYS4_BATCH_NO, QA_SYS4_SAP_CODE, QA_SYS4_EXPIRE_TIME," +
+                    "  QA_SYS4_INFO_2, QA_SYS4_BATCH_NO_2, QA_SYS4_SAP_CODE_2, QA_SYS4_EXPIRE_TIME_2," +
                     "  SYS5_INFO, SYS5_BATCH_NO," +
+                    "  SYS5_INFO_2, SYS5_BATCH_NO_2," +
                     "  SYS1_NEEDLE_SN, SYS1_NEEDLE_SIZE, SYS2_NEEDLE_SN, SYS2_NEEDLE_SIZE," +
                     "  SYS1_DISPENSING_PATTERN, SYS2_DISPENSING_PATTERN, COVERAGE_DETACH, TILT_PROD, POSITION_PROD," +
                     "  REMARK, CREATED_TIME)" +
@@ -523,10 +618,15 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                     "  :LOT_ID, :CUST_NAME, :PKG, :LEAD, :CUST_DEVICE, :NICK, :QTY," +
                     "  :EQUIP_ID, :OPER_CODE, :RECIPE_NAME, :AI_NO, :USER_ID," +
                     "  :SYS1_INFO, :SYS1_BATCH_NO, :SYS1_SAP_CODE, :SYS1_EXPIRE_TIME," +
+                    "  :SYS1_INFO_2, :SYS1_BATCH_NO_2, :SYS1_SAP_CODE_2, :SYS1_EXPIRE_TIME_2," +
                     "  :SYS2_INFO, :SYS2_BATCH_NO, :SYS2_SAP_CODE, :SYS2_EXPIRE_TIME," +
+                    "  :SYS2_INFO_2, :SYS2_BATCH_NO_2, :SYS2_SAP_CODE_2, :SYS2_EXPIRE_TIME_2," +
                     "  :QA_SYS3_INFO, :QA_SYS3_BATCH_NO, :QA_SYS3_SAP_CODE, :QA_SYS3_EXPIRE_TIME," +
+                    "  :QA_SYS3_INFO_2, :QA_SYS3_BATCH_NO_2, :QA_SYS3_SAP_CODE_2, :QA_SYS3_EXPIRE_TIME_2," +
                     "  :QA_SYS4_INFO, :QA_SYS4_BATCH_NO, :QA_SYS4_SAP_CODE, :QA_SYS4_EXPIRE_TIME," +
+                    "  :QA_SYS4_INFO_2, :QA_SYS4_BATCH_NO_2, :QA_SYS4_SAP_CODE_2, :QA_SYS4_EXPIRE_TIME_2," +
                     "  :SYS5_INFO, :SYS5_BATCH_NO," +
+                    "  :SYS5_INFO_2, :SYS5_BATCH_NO_2," +
                     "  :SYS1_NEEDLE_SN, :SYS1_NEEDLE_SIZE, :SYS2_NEEDLE_SN, :SYS2_NEEDLE_SIZE," +
                     "  :SYS1_DISPENSING_PATTERN, :SYS2_DISPENSING_PATTERN, :COVERAGE_DETACH, :TILT_PROD, :POSITION_PROD," +
                     "  :REMARK, sysdate)";
@@ -547,29 +647,47 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                 oraObj.AddParameter(new OracleParameter("RECIPE_NAME", txt_RecipeName_prd.Text));
                 oraObj.AddParameter(new OracleParameter("AI_NO", txt_ai_prd.Text));
                 oraObj.AddParameter(new OracleParameter("USER_ID", Session["USER_NAME"].ToString().Trim()));
-                // System1
+                // System1 (Head1 / Head2)
                 oraObj.AddParameter(new OracleParameter("SYS1_INFO", txt_sys1_info_prd.Text));
                 oraObj.AddParameter(new OracleParameter("SYS1_BATCH_NO", txt_sys1_batch_prd.Text));
                 oraObj.AddParameter(new OracleParameter("SYS1_SAP_CODE", txt_sys1_sap_prd.Text));
                 oraObj.AddParameter(new OracleParameter("SYS1_EXPIRE_TIME", tp_sys1_expire_prd.DateInput.DisplayText));
-                // System2
+                oraObj.AddParameter(new OracleParameter("SYS1_INFO_2", txt_sys1_info_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("SYS1_BATCH_NO_2", txt_sys1_batch_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("SYS1_SAP_CODE_2", txt_sys1_sap_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("SYS1_EXPIRE_TIME_2", tp_sys1_expire_prd_h2.DateInput.DisplayText));
+                // System2 (Head1 / Head2)
                 oraObj.AddParameter(new OracleParameter("SYS2_INFO", txt_sys2_info_prd.Text));
                 oraObj.AddParameter(new OracleParameter("SYS2_BATCH_NO", txt_sys2_batch_prd.Text));
                 oraObj.AddParameter(new OracleParameter("SYS2_SAP_CODE", txt_sys2_sap_prd.Text));
                 oraObj.AddParameter(new OracleParameter("SYS2_EXPIRE_TIME", tp_sys2_expire_prd.DateInput.DisplayText));
-                // System3
+                oraObj.AddParameter(new OracleParameter("SYS2_INFO_2", txt_sys2_info_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("SYS2_BATCH_NO_2", txt_sys2_batch_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("SYS2_SAP_CODE_2", txt_sys2_sap_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("SYS2_EXPIRE_TIME_2", tp_sys2_expire_prd_h2.DateInput.DisplayText));
+                // System3 (Head1 / Head2)
                 oraObj.AddParameter(new OracleParameter("QA_SYS3_INFO", txt_sys3_info_prd.Text));
                 oraObj.AddParameter(new OracleParameter("QA_SYS3_BATCH_NO", txt_sys3_batch_prd.Text));
                 oraObj.AddParameter(new OracleParameter("QA_SYS3_SAP_CODE", txt_sys3_sap_prd.Text));
                 oraObj.AddParameter(new OracleParameter("QA_SYS3_EXPIRE_TIME", tp_sys3_expire_prd.DateInput.DisplayText));
-                // System4
+                oraObj.AddParameter(new OracleParameter("QA_SYS3_INFO_2", txt_sys3_info_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("QA_SYS3_BATCH_NO_2", txt_sys3_batch_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("QA_SYS3_SAP_CODE_2", txt_sys3_sap_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("QA_SYS3_EXPIRE_TIME_2", tp_sys3_expire_prd_h2.DateInput.DisplayText));
+                // System4 (Head1 / Head2)
                 oraObj.AddParameter(new OracleParameter("QA_SYS4_INFO", txt_sys4_info_prd.Text));
                 oraObj.AddParameter(new OracleParameter("QA_SYS4_BATCH_NO", txt_sys4_batch_prd.Text));
                 oraObj.AddParameter(new OracleParameter("QA_SYS4_SAP_CODE", txt_sys4_sap_prd.Text));
                 oraObj.AddParameter(new OracleParameter("QA_SYS4_EXPIRE_TIME", tp_sys4_expire_prd.DateInput.DisplayText));
-                // Lid (System5)
+                oraObj.AddParameter(new OracleParameter("QA_SYS4_INFO_2", txt_sys4_info_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("QA_SYS4_BATCH_NO_2", txt_sys4_batch_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("QA_SYS4_SAP_CODE_2", txt_sys4_sap_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("QA_SYS4_EXPIRE_TIME_2", tp_sys4_expire_prd_h2.DateInput.DisplayText));
+                // Lid / System5 (Head1 / Head2) — Lid 는 SAP Code / Expire Time 항목이 원래 없다
                 oraObj.AddParameter(new OracleParameter("SYS5_INFO", txt_lid_info_prd.Text));
                 oraObj.AddParameter(new OracleParameter("SYS5_BATCH_NO", txt_lid_batch_prd.Text));
+                oraObj.AddParameter(new OracleParameter("SYS5_INFO_2", txt_lid_info_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("SYS5_BATCH_NO_2", txt_lid_batch_prd_h2.Text));
                 // Needle (Set-Up only)
                 oraObj.AddParameter(new OracleParameter("SYS1_NEEDLE_SN", isSetUp ? txt_tim_needle_sn_prd.Text : string.Empty));
                 oraObj.AddParameter(new OracleParameter("SYS1_NEEDLE_SIZE", isSetUp ? txt_tim_needle_size_prd.Text : string.Empty));
