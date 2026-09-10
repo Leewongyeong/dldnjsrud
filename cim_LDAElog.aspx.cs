@@ -1240,11 +1240,18 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
         catch (Exception ex)
         {
             // 조회 실패를 조용히 삼키면 "결과 0건" 과 구분되지 않으므로 사유를 알린다.
-            // 예외 타입 / InnerException 까지 보여줘야 다음에 실패해도 바로 원인을 짚을 수 있다.
+            // 타입/InnerException 만으로 원인을 못 찾았으므로 이번엔 StackTrace 상위 몇 줄까지 보여준다
+            // (StackTrace 맨 위가 실제로 예외가 던져진 지점에 가장 가깝다).
             rgv_List.DataSource = new DataTable();
             string detail = "조회 실패 [" + ex.GetType().Name + "]: " + ex.Message;
             if (ex.InnerException != null)
                 detail += " / Inner[" + ex.InnerException.GetType().Name + "]: " + ex.InnerException.Message;
+            if (!string.IsNullOrEmpty(ex.StackTrace))
+            {
+                string[] frames = ex.StackTrace.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+                int take = Math.Min(frames.Length, 8);
+                detail += "\n\n[StackTrace 상위 " + take + "줄]\n" + string.Join("\n", frames, 0, take);
+            }
             ShowAlert(detail);
         }
     }
