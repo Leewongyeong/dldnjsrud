@@ -130,6 +130,10 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
             rgv_List.MasterTableView.Columns.Add(deleteColumn);
 
         AddGridColumn("INPUT_TIME", "INPUT_TIME");
+        AddGridColumn("SHIFT", "Shift");
+        // TECH 는 Sheet Type 개념이 없다 (입력 화면에도 없음, ELOGSHEET_TYPE 이 항상 'TECH' 고정)
+        if (sheetType != "TECH")
+            AddGridColumn("SHEET_TYPE", "Sheet Type");
         AddGridColumn("LOT_ID", "LOT ID");
         AddGridColumn("CUST_NAME", "Customer");
         AddGridColumn("PKG", "PKG");
@@ -139,7 +143,6 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
         AddGridColumn("OPER_CODE", "Oper Code");
         AddGridColumn("RECIPE_NAME", "Recipe Name");
         AddGridColumn("USER_ID", "User ID");
-        AddGridColumn("SHIFT", "Shift");
 
         switch (sheetType)
         {
@@ -157,7 +160,6 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                 break;
 
             case "QA":
-                AddGridColumn("SHEET_TYPE", "Sheet Type");
                 AddGridColumn("NICK", "Nick");
                 AddGridColumn("QTY", "Qty");
                 AddGridColumn("SYS1_INFO", "System1 Info (Head1)");
@@ -196,6 +198,10 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                 AddGridColumn("SYS5_BATCH_NO", "Lid Batch No (Head1)");
                 AddGridColumn("SYS5_INFO_2", "Lid Info (Head2)");
                 AddGridColumn("SYS5_BATCH_NO_2", "Lid Batch No (Head2)");
+                AddGridColumn("SYS5_SAP_CODE", "Lid SAP Code (Head1)");
+                AddGridColumn("SYS5_EXPIRE_TIME", "Lid Expire Time (Head1)");
+                AddGridColumn("SYS5_SAP_CODE_2", "Lid SAP Code (Head2)");
+                AddGridColumn("SYS5_EXPIRE_TIME_2", "Lid Expire Time (Head2)");
                 AddGridColumn("QA_SYS1_PATTERN", "TIM Pattern");
                 AddGridColumn("QA_SYS2_PATTERN", "Glue Pattern");
                 AddGridColumn("QA_DUMMY_COVERAGE", "Dummy Coverage");
@@ -210,7 +216,6 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
             case "PROD":
             case "PRD":     // 예전 Session 값 호환
             default:
-                AddGridColumn("SHEET_TYPE", "Sheet Type");
                 AddGridColumn("NICK", "Nick");
                 AddGridColumn("QTY", "Qty");
                 AddGridColumn("AI_NO", "AI");
@@ -250,6 +255,10 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                 AddGridColumn("SYS5_BATCH_NO", "Lid Batch No (Head1)");
                 AddGridColumn("SYS5_INFO_2", "Lid Info (Head2)");
                 AddGridColumn("SYS5_BATCH_NO_2", "Lid Batch No (Head2)");
+                AddGridColumn("SYS5_SAP_CODE", "Lid SAP Code (Head1)");
+                AddGridColumn("SYS5_EXPIRE_TIME", "Lid Expire Time (Head1)");
+                AddGridColumn("SYS5_SAP_CODE_2", "Lid SAP Code (Head2)");
+                AddGridColumn("SYS5_EXPIRE_TIME_2", "Lid Expire Time (Head2)");
                 AddGridColumn("SYS1_NEEDLE_SN", "TIM Needle S/N");
                 AddGridColumn("SYS1_NEEDLE_SIZE", "TIM Needle Size");
                 AddGridColumn("SYS2_NEEDLE_SN", "Glue Needle S/N");
@@ -389,20 +398,22 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
         {
             txt_sys1_info_prd.Text = txt_sys2_info_prd.Text = txt_sys3_info_prd.Text = txt_sys4_info_prd.Text = txt_lid_info_prd.Text = string.Empty;
             txt_sys1_batch_prd.Text = txt_sys2_batch_prd.Text = txt_sys3_batch_prd.Text = txt_sys4_batch_prd.Text = txt_lid_batch_prd.Text = string.Empty;
-            txt_sys1_sap_prd.Text = txt_sys2_sap_prd.Text = txt_sys3_sap_prd.Text = txt_sys4_sap_prd.Text = string.Empty;
+            txt_sys1_sap_prd.Text = txt_sys2_sap_prd.Text = txt_sys3_sap_prd.Text = txt_sys4_sap_prd.Text = txt_lid_sap_prd.Text = string.Empty;
             tp_sys1_expire_prd.SelectedDate = null;
             tp_sys2_expire_prd.SelectedDate = null;
             tp_sys3_expire_prd.SelectedDate = null;
             tp_sys4_expire_prd.SelectedDate = null;
+            tp_lid_expire_prd.SelectedDate = null;
 
             // Head2
             txt_sys1_info_prd_h2.Text = txt_sys2_info_prd_h2.Text = txt_sys3_info_prd_h2.Text = txt_sys4_info_prd_h2.Text = txt_lid_info_prd_h2.Text = string.Empty;
             txt_sys1_batch_prd_h2.Text = txt_sys2_batch_prd_h2.Text = txt_sys3_batch_prd_h2.Text = txt_sys4_batch_prd_h2.Text = txt_lid_batch_prd_h2.Text = string.Empty;
-            txt_sys1_sap_prd_h2.Text = txt_sys2_sap_prd_h2.Text = txt_sys3_sap_prd_h2.Text = txt_sys4_sap_prd_h2.Text = string.Empty;
+            txt_sys1_sap_prd_h2.Text = txt_sys2_sap_prd_h2.Text = txt_sys3_sap_prd_h2.Text = txt_sys4_sap_prd_h2.Text = txt_lid_sap_prd_h2.Text = string.Empty;
             tp_sys1_expire_prd_h2.SelectedDate = null;
             tp_sys2_expire_prd_h2.SelectedDate = null;
             tp_sys3_expire_prd_h2.SelectedDate = null;
             tp_sys4_expire_prd_h2.SelectedDate = null;
+            tp_lid_expire_prd_h2.SelectedDate = null;
         }
     }
 
@@ -509,34 +520,55 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
     protected void btn_sys3_na_prd_Click(object sender, EventArgs e) { txt_sys3_batch_prd.Text = "N/A"; txt_sys3_info_prd.Text = txt_sys3_sap_prd.Text = string.Empty; }
     protected void btn_sys4_na_prd_Click(object sender, EventArgs e) { txt_sys4_batch_prd.Text = "N/A"; txt_sys4_info_prd.Text = txt_sys4_sap_prd.Text = string.Empty; }
 
-    protected void txt_lid_batch_prd_TextChanged(object sender, EventArgs e)
+    /// <summary>
+    /// Lid Batch No 로 CIM_BATSAP 을 조회한다. System1~4 와 동일하게
+    /// SAP Code = 자재 코드(MATL_CODE) 그대로, Information = ai_content 에서 찾은 설명으로 분리한다.
+    /// (기존에는 MATL_CODE 를 Information 칸에 그대로 넣고 있어서 SAP Code 성격의 값이
+    ///  Information 에 표시되는 문제가 있었다)
+    /// </summary>
+    private void LookupLidBatchNo_Prd(TextBox txtBatch, TextBox txtInfo, TextBox txtSap)
     {
         if (txt_LotId_prd.Text == "")
         {
             ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ERROR", "alert('LOT ID를 먼저 입력하세요.');", true);
-            txt_lid_batch_prd.Text = "";
+            txtBatch.Text = "";
             return;
         }
         try
         {
-            string BATCH = txt_lid_batch_prd.Text.ToUpper();
+            string BATCH = txtBatch.Text.ToUpper();
             if (BATCH.Contains("/")) BATCH = BATCH.Split('/')[1];
 
             DataTable batchID = GetHeatSinkBatchInfo(BATCH);
             if (batchID == null || batchID.Rows.Count == 0)
             {
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ERROR", "alert('잘못된 Lid BATCH NO 입니다.');", true);
-                txt_lid_batch_prd.Text = string.Empty;
+                txtBatch.Text = string.Empty;
+                txtInfo.Text = string.Empty;
+                txtSap.Text = string.Empty;
                 return;
             }
-            txt_lid_batch_prd.Text = batchID.Rows[0]["BATCH_NO"].ToString();
-            txt_lid_info_prd.Text = batchID.Rows[0]["MATL_CODE"].ToString();
+            txtBatch.Text = batchID.Rows[0]["BATCH_NO"].ToString();
+
+            string matlCode = batchID.Rows[0]["MATL_CODE"].ToString();
+            txtSap.Text = matlCode;
+
+            DataTable dtInfo = GetSapInfoByLotId(txt_LotId_prd.Text, matlCode);
+            txtInfo.Text = (dtInfo != null && dtInfo.Rows.Count > 0)
+                ? dtInfo.Rows[0][4].ToString().Split('|')[1]
+                : "ERROR";
         }
         catch
         {
-            txt_lid_batch_prd.Text = string.Empty;
-            txt_lid_info_prd.Text = string.Empty;
+            txtBatch.Text = string.Empty;
+            txtInfo.Text = string.Empty;
+            txtSap.Text = string.Empty;
         }
+    }
+
+    protected void txt_lid_batch_prd_TextChanged(object sender, EventArgs e)
+    {
+        LookupLidBatchNo_Prd(txt_lid_batch_prd, txt_lid_info_prd, txt_lid_sap_prd);
     }
 
     #region PRD Head2 (장비 1대당 Head 2개 대응)
@@ -572,32 +604,7 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
 
     protected void txt_lid_batch_prd_h2_TextChanged(object sender, EventArgs e)
     {
-        if (txt_LotId_prd.Text == "")
-        {
-            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ERROR", "alert('LOT ID를 먼저 입력하세요.');", true);
-            txt_lid_batch_prd_h2.Text = "";
-            return;
-        }
-        try
-        {
-            string BATCH = txt_lid_batch_prd_h2.Text.ToUpper();
-            if (BATCH.Contains("/")) BATCH = BATCH.Split('/')[1];
-
-            DataTable batchID = GetHeatSinkBatchInfo(BATCH);
-            if (batchID == null || batchID.Rows.Count == 0)
-            {
-                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ERROR", "alert('잘못된 Lid BATCH NO 입니다.');", true);
-                txt_lid_batch_prd_h2.Text = string.Empty;
-                return;
-            }
-            txt_lid_batch_prd_h2.Text = batchID.Rows[0]["BATCH_NO"].ToString();
-            txt_lid_info_prd_h2.Text = batchID.Rows[0]["MATL_CODE"].ToString();
-        }
-        catch
-        {
-            txt_lid_batch_prd_h2.Text = string.Empty;
-            txt_lid_info_prd_h2.Text = string.Empty;
-        }
+        LookupLidBatchNo_Prd(txt_lid_batch_prd_h2, txt_lid_info_prd_h2, txt_lid_sap_prd_h2);
     }
 
     #endregion
@@ -626,8 +633,8 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                     "  SYS3_INFO_2, SYS3_BATCH_NO_2, SYS3_SAP_CODE_2, SYS3_EXPIRE_TIME_2," +
                     "  SYS4_INFO, SYS4_BATCH_NO, SYS4_SAP_CODE, SYS4_EXPIRE_TIME," +
                     "  SYS4_INFO_2, SYS4_BATCH_NO_2, SYS4_SAP_CODE_2, SYS4_EXPIRE_TIME_2," +
-                    "  SYS5_INFO, SYS5_BATCH_NO," +
-                    "  SYS5_INFO_2, SYS5_BATCH_NO_2," +
+                    "  SYS5_INFO, SYS5_BATCH_NO, SYS5_SAP_CODE, SYS5_EXPIRE_TIME," +
+                    "  SYS5_INFO_2, SYS5_BATCH_NO_2, SYS5_SAP_CODE_2, SYS5_EXPIRE_TIME_2," +
                     "  SYS1_NEEDLE_SN, SYS1_NEEDLE_SIZE, SYS2_NEEDLE_SN, SYS2_NEEDLE_SIZE," +
                     "  SYS1_DISPENSING_PATTERN, SYS2_DISPENSING_PATTERN, COVERAGE_DETACH, TILT_PROD, POSITION_PROD," +
                     "  REMARK, CREATED_TIME)" +
@@ -643,8 +650,8 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                     "  :SYS3_INFO_2, :SYS3_BATCH_NO_2, :SYS3_SAP_CODE_2, :SYS3_EXPIRE_TIME_2," +
                     "  :SYS4_INFO, :SYS4_BATCH_NO, :SYS4_SAP_CODE, :SYS4_EXPIRE_TIME," +
                     "  :SYS4_INFO_2, :SYS4_BATCH_NO_2, :SYS4_SAP_CODE_2, :SYS4_EXPIRE_TIME_2," +
-                    "  :SYS5_INFO, :SYS5_BATCH_NO," +
-                    "  :SYS5_INFO_2, :SYS5_BATCH_NO_2," +
+                    "  :SYS5_INFO, :SYS5_BATCH_NO, :SYS5_SAP_CODE, :SYS5_EXPIRE_TIME," +
+                    "  :SYS5_INFO_2, :SYS5_BATCH_NO_2, :SYS5_SAP_CODE_2, :SYS5_EXPIRE_TIME_2," +
                     "  :SYS1_NEEDLE_SN, :SYS1_NEEDLE_SIZE, :SYS2_NEEDLE_SN, :SYS2_NEEDLE_SIZE," +
                     "  :SYS1_DISPENSING_PATTERN, :SYS2_DISPENSING_PATTERN, :COVERAGE_DETACH, :TILT_PROD, :POSITION_PROD," +
                     "  :REMARK, sysdate)";
@@ -704,8 +711,12 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                 // Lid / System5 (Head1 / Head2) — Lid 는 SAP Code / Expire Time 항목이 원래 없다
                 oraObj.AddParameter(new OracleParameter("SYS5_INFO", txt_lid_info_prd.Text));
                 oraObj.AddParameter(new OracleParameter("SYS5_BATCH_NO", txt_lid_batch_prd.Text));
+                oraObj.AddParameter(new OracleParameter("SYS5_SAP_CODE", txt_lid_sap_prd.Text));
+                oraObj.AddParameter(new OracleParameter("SYS5_EXPIRE_TIME", tp_lid_expire_prd.DateInput.DisplayText));
                 oraObj.AddParameter(new OracleParameter("SYS5_INFO_2", txt_lid_info_prd_h2.Text));
                 oraObj.AddParameter(new OracleParameter("SYS5_BATCH_NO_2", txt_lid_batch_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("SYS5_SAP_CODE_2", txt_lid_sap_prd_h2.Text));
+                oraObj.AddParameter(new OracleParameter("SYS5_EXPIRE_TIME_2", tp_lid_expire_prd_h2.DateInput.DisplayText));
                 // Needle (Set-Up only)
                 oraObj.AddParameter(new OracleParameter("SYS1_NEEDLE_SN", isSetUp ? txt_tim_needle_sn_prd.Text : string.Empty));
                 oraObj.AddParameter(new OracleParameter("SYS1_NEEDLE_SIZE", isSetUp ? txt_tim_needle_size_prd.Text : string.Empty));
@@ -850,20 +861,22 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
         {
             txt_sys1_information_qa.Text = txt_sys2_information_qa.Text = txt_sys3_information_qa.Text = txt_sys4_information_qa.Text = txt_lid_information_qa.Text = string.Empty;
             txt_sys1_batch_no_qa.Text = txt_sys2_batch_no_qa.Text = txt_sys3_batch_no_qa.Text = txt_sys4_batch_no_qa.Text = txt_lid_batch_no_qa.Text = string.Empty;
-            txt_sys1_sap_code_qa.Text = txt_sys2_sap_code_qa.Text = txt_sys3_sap_code_qa.Text = txt_sys4_sap_code_qa.Text = string.Empty;
+            txt_sys1_sap_code_qa.Text = txt_sys2_sap_code_qa.Text = txt_sys3_sap_code_qa.Text = txt_sys4_sap_code_qa.Text = txt_lid_sap_code_qa.Text = string.Empty;
             tp_sys1_expire_time_qa.DateInput.DisplayText = string.Empty;
             tp_sys2_expire_time_qa.DateInput.DisplayText = string.Empty;
             tp_sys3_expire_time_qa.DateInput.DisplayText = string.Empty;
             tp_sys4_expire_time_qa.DateInput.DisplayText = string.Empty;
+            tp_lid_expire_time_qa.DateInput.DisplayText = string.Empty;
 
             // Head2
             txt_sys1_information_qa_h2.Text = txt_sys2_information_qa_h2.Text = txt_sys3_information_qa_h2.Text = txt_sys4_information_qa_h2.Text = txt_lid_information_qa_h2.Text = string.Empty;
             txt_sys1_batch_no_qa_h2.Text = txt_sys2_batch_no_qa_h2.Text = txt_sys3_batch_no_qa_h2.Text = txt_sys4_batch_no_qa_h2.Text = txt_lid_batch_no_qa_h2.Text = string.Empty;
-            txt_sys1_sap_code_qa_h2.Text = txt_sys2_sap_code_qa_h2.Text = txt_sys3_sap_code_qa_h2.Text = txt_sys4_sap_code_qa_h2.Text = string.Empty;
+            txt_sys1_sap_code_qa_h2.Text = txt_sys2_sap_code_qa_h2.Text = txt_sys3_sap_code_qa_h2.Text = txt_sys4_sap_code_qa_h2.Text = txt_lid_sap_code_qa_h2.Text = string.Empty;
             tp_sys1_expire_time_qa_h2.DateInput.DisplayText = string.Empty;
             tp_sys2_expire_time_qa_h2.DateInput.DisplayText = string.Empty;
             tp_sys3_expire_time_qa_h2.DateInput.DisplayText = string.Empty;
             tp_sys4_expire_time_qa_h2.DateInput.DisplayText = string.Empty;
+            tp_lid_expire_time_qa_h2.DateInput.DisplayText = string.Empty;
         }
     }
 
@@ -949,34 +962,53 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
     protected void btn_sys3_na_qa_Click(object sender, EventArgs e) { txt_sys3_batch_no_qa.Text = "N/A"; txt_sys3_information_qa.Text = txt_sys3_sap_code_qa.Text = string.Empty; }
     protected void btn_sys4_na_qa_Click(object sender, EventArgs e) { txt_sys4_batch_no_qa.Text = "N/A"; txt_sys4_information_qa.Text = txt_sys4_sap_code_qa.Text = string.Empty; }
 
-    protected void txt_lid_batch_no_qa_TextChanged(object sender, EventArgs e)
+    /// <summary>
+    /// Lid Batch No 로 CIM_BATSAP 을 조회한다. System1~4 와 동일하게
+    /// SAP Code = 자재 코드(MATL_CODE) 그대로, Information = ai_content 에서 찾은 설명으로 분리한다.
+    /// </summary>
+    private void LookupLidBatchNo_Qa(TextBox txtBatch, TextBox txtInfo, TextBox txtSap)
     {
         if (txt_LotId_qa.Text == "")
         {
             ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ERROR", "alert('LOT ID를 먼저 입력하세요.');", true);
-            txt_lid_batch_no_qa.Text = "";
+            txtBatch.Text = "";
             return;
         }
         try
         {
-            string BATCH = txt_lid_batch_no_qa.Text.ToUpper();
+            string BATCH = txtBatch.Text.ToUpper();
             if (BATCH.Contains("/")) BATCH = BATCH.Split('/')[1];
 
             DataTable batchID = GetHeatSinkBatchInfo(BATCH);
             if (batchID == null || batchID.Rows.Count == 0)
             {
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ERROR", "alert('잘못된 Lid BATCH NO 입니다.');", true);
-                txt_lid_batch_no_qa.Text = string.Empty;
+                txtBatch.Text = string.Empty;
+                txtInfo.Text = string.Empty;
+                txtSap.Text = string.Empty;
                 return;
             }
-            txt_lid_batch_no_qa.Text = batchID.Rows[0]["BATCH_NO"].ToString();
-            txt_lid_information_qa.Text = batchID.Rows[0]["MATL_CODE"].ToString();
+            txtBatch.Text = batchID.Rows[0]["BATCH_NO"].ToString();
+
+            string matlCode = batchID.Rows[0]["MATL_CODE"].ToString();
+            txtSap.Text = matlCode;
+
+            DataTable dtInfo = GetSapInfoByLotId(txt_LotId_qa.Text, matlCode);
+            txtInfo.Text = (dtInfo != null && dtInfo.Rows.Count > 0)
+                ? dtInfo.Rows[0][4].ToString().Split('|')[1]
+                : "ERROR";
         }
         catch
         {
-            txt_lid_batch_no_qa.Text = string.Empty;
-            txt_lid_information_qa.Text = string.Empty;
+            txtBatch.Text = string.Empty;
+            txtInfo.Text = string.Empty;
+            txtSap.Text = string.Empty;
         }
+    }
+
+    protected void txt_lid_batch_no_qa_TextChanged(object sender, EventArgs e)
+    {
+        LookupLidBatchNo_Qa(txt_lid_batch_no_qa, txt_lid_information_qa, txt_lid_sap_code_qa);
     }
 
     #region QA Head2 (장비 1대당 Head 2개 대응)
@@ -1012,32 +1044,7 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
 
     protected void txt_lid_batch_no_qa_h2_TextChanged(object sender, EventArgs e)
     {
-        if (txt_LotId_qa.Text == "")
-        {
-            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ERROR", "alert('LOT ID를 먼저 입력하세요.');", true);
-            txt_lid_batch_no_qa_h2.Text = "";
-            return;
-        }
-        try
-        {
-            string BATCH = txt_lid_batch_no_qa_h2.Text.ToUpper();
-            if (BATCH.Contains("/")) BATCH = BATCH.Split('/')[1];
-
-            DataTable batchID = GetHeatSinkBatchInfo(BATCH);
-            if (batchID == null || batchID.Rows.Count == 0)
-            {
-                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ERROR", "alert('잘못된 Lid BATCH NO 입니다.');", true);
-                txt_lid_batch_no_qa_h2.Text = string.Empty;
-                return;
-            }
-            txt_lid_batch_no_qa_h2.Text = batchID.Rows[0]["BATCH_NO"].ToString();
-            txt_lid_information_qa_h2.Text = batchID.Rows[0]["MATL_CODE"].ToString();
-        }
-        catch
-        {
-            txt_lid_batch_no_qa_h2.Text = string.Empty;
-            txt_lid_information_qa_h2.Text = string.Empty;
-        }
+        LookupLidBatchNo_Qa(txt_lid_batch_no_qa_h2, txt_lid_information_qa_h2, txt_lid_sap_code_qa_h2);
     }
 
     #endregion
@@ -1066,8 +1073,8 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                     "  SYS3_INFO_2, SYS3_BATCH_NO_2, SYS3_SAP_CODE_2, SYS3_EXPIRE_TIME_2," +
                     "  SYS4_INFO, SYS4_BATCH_NO, SYS4_SAP_CODE, SYS4_EXPIRE_TIME," +
                     "  SYS4_INFO_2, SYS4_BATCH_NO_2, SYS4_SAP_CODE_2, SYS4_EXPIRE_TIME_2," +
-                    "  SYS5_INFO, SYS5_BATCH_NO," +
-                    "  SYS5_INFO_2, SYS5_BATCH_NO_2," +
+                    "  SYS5_INFO, SYS5_BATCH_NO, SYS5_SAP_CODE, SYS5_EXPIRE_TIME," +
+                    "  SYS5_INFO_2, SYS5_BATCH_NO_2, SYS5_SAP_CODE_2, SYS5_EXPIRE_TIME_2," +
                     "  QA_SYS1_PATTERN, QA_SYS2_PATTERN, QA_DUMMY_COVERAGE, QA_DUMMY_COVERAGE_TYPE," +
                     "  QA_STRIP_NO, QA_VISUAL, QA_VISUAL_TYPE," +
                     "  BUY_OFF_RESULT, REMARK, CREATED_TIME)" +
@@ -1083,8 +1090,8 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                     "  :SYS3_INFO_2, :SYS3_BATCH_NO_2, :SYS3_SAP_CODE_2, :SYS3_EXPIRE_TIME_2," +
                     "  :SYS4_INFO, :SYS4_BATCH_NO, :SYS4_SAP_CODE, :SYS4_EXPIRE_TIME," +
                     "  :SYS4_INFO_2, :SYS4_BATCH_NO_2, :SYS4_SAP_CODE_2, :SYS4_EXPIRE_TIME_2," +
-                    "  :SYS5_INFO, :SYS5_BATCH_NO," +
-                    "  :SYS5_INFO_2, :SYS5_BATCH_NO_2," +
+                    "  :SYS5_INFO, :SYS5_BATCH_NO, :SYS5_SAP_CODE, :SYS5_EXPIRE_TIME," +
+                    "  :SYS5_INFO_2, :SYS5_BATCH_NO_2, :SYS5_SAP_CODE_2, :SYS5_EXPIRE_TIME_2," +
                     "  :QA_SYS1_PATTERN, :QA_SYS2_PATTERN, :QA_DUMMY_COVERAGE, :QA_DUMMY_COVERAGE_TYPE," +
                     "  :QA_STRIP_NO, :QA_VISUAL, :QA_VISUAL_TYPE," +
                     "  :BUY_OFF_RESULT, :REMARK, sysdate)";
@@ -1143,8 +1150,12 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                 // Lid / System5 (Head1 / Head2) — Lid 는 SAP Code / Expire Time 항목이 원래 없다
                 oraObj.AddParameter(new OracleParameter("SYS5_INFO", isSetUp ? txt_lid_information_qa.Text : string.Empty));
                 oraObj.AddParameter(new OracleParameter("SYS5_BATCH_NO", isSetUp ? txt_lid_batch_no_qa.Text : string.Empty));
+                oraObj.AddParameter(new OracleParameter("SYS5_SAP_CODE", isSetUp ? txt_lid_sap_code_qa.Text : string.Empty));
+                oraObj.AddParameter(new OracleParameter("SYS5_EXPIRE_TIME", isSetUp ? tp_lid_expire_time_qa.DateInput.DisplayText : string.Empty));
                 oraObj.AddParameter(new OracleParameter("SYS5_INFO_2", isSetUp ? txt_lid_information_qa_h2.Text : string.Empty));
                 oraObj.AddParameter(new OracleParameter("SYS5_BATCH_NO_2", isSetUp ? txt_lid_batch_no_qa_h2.Text : string.Empty));
+                oraObj.AddParameter(new OracleParameter("SYS5_SAP_CODE_2", isSetUp ? txt_lid_sap_code_qa_h2.Text : string.Empty));
+                oraObj.AddParameter(new OracleParameter("SYS5_EXPIRE_TIME_2", isSetUp ? tp_lid_expire_time_qa_h2.DateInput.DisplayText : string.Empty));
                 // Pattern / Measure
                 oraObj.AddParameter(new OracleParameter("QA_SYS1_PATTERN", isSetUp ? ddl_tim_pattern_setup_qa.SelectedItem.Text : ddl_tim_pattern_vm_qa.SelectedItem.Text));
                 oraObj.AddParameter(new OracleParameter("QA_SYS2_PATTERN", isSetUp ? ddl_glue_pattern_setup_qa.SelectedItem.Text : ddl_glue_pattern_vm_qa.SelectedItem.Text));
@@ -1276,12 +1287,12 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
         "  SYS1_NEEDLE_SIZE, SYS2_NEEDLE_SN, SYS2_NEEDLE_SIZE, PICKUP_TOOL, PCB_REVERSE_DETECT_CHECK, BONDING_FORCE," +
         "  DELAY_TIME, PCB_MAGAZINE_LOAD_UNLOAD_CHECK, MODE_2DID, SYS1_INFO, SYS1_BATCH_NO, SYS1_SAP_CODE," +
         "  SYS1_EXPIRE_TIME, SYS3_INFO, SYS3_BATCH_NO, SYS3_SAP_CODE, SYS3_EXPIRE_TIME, SYS4_INFO," +
-        "  SYS4_BATCH_NO, SYS4_SAP_CODE, SYS4_EXPIRE_TIME, SYS5_INFO, QA_SYS1_PATTERN, QA_SYS2_PATTERN," +
+        "  SYS4_BATCH_NO, SYS4_SAP_CODE, SYS4_EXPIRE_TIME, SYS5_INFO, SYS5_SAP_CODE, SYS5_EXPIRE_TIME, QA_SYS1_PATTERN, QA_SYS2_PATTERN," +
         "  QA_DUMMY_COVERAGE, QA_DUMMY_COVERAGE_TYPE, QA_STRIP_NO, QA_VISUAL, QA_VISUAL_TYPE, BUY_OFF_RESULT," +
         "  REMARK, CREATED_TIME, PCB_BACK_SIDE_SCRATCH_CHECK, PUSHER_POSITION_CHECK, SYS1_INFO_2, SYS1_BATCH_NO_2," +
         "  SYS1_SAP_CODE_2, SYS1_EXPIRE_TIME_2, SYS2_INFO_2, SYS2_BATCH_NO_2, SYS2_SAP_CODE_2, SYS2_EXPIRE_TIME_2," +
         "  SYS3_INFO_2, SYS3_BATCH_NO_2, SYS3_SAP_CODE_2, SYS3_EXPIRE_TIME_2, SYS4_INFO_2, SYS4_BATCH_NO_2," +
-        "  SYS4_SAP_CODE_2, SYS4_EXPIRE_TIME_2, SYS5_INFO_2, SYS5_BATCH_NO_2";
+        "  SYS4_SAP_CODE_2, SYS4_EXPIRE_TIME_2, SYS5_INFO_2, SYS5_BATCH_NO_2, SYS5_SAP_CODE_2, SYS5_EXPIRE_TIME_2";
 
     public static DataTable LDAElog_Open_Data(DateTime? date_fr, DateTime? date_to,
         string lot_id, string mc_no, string userID, string recipe_name,

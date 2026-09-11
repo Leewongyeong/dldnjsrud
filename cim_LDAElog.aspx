@@ -372,8 +372,8 @@
                                                         <td><asp:TextBox ID="txt_sys3_sap_prd_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
                                                         <td><asp:TextBox ID="txt_sys4_sap_prd" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
                                                         <td><asp:TextBox ID="txt_sys4_sap_prd_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
-                                                        <td></td>
-                                                        <td></td>
+                                                        <td><asp:TextBox ID="txt_lid_sap_prd" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
+                                                        <td><asp:TextBox ID="txt_lid_sap_prd_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Expire Time</th>
@@ -385,8 +385,8 @@
                                                         <td><telerik:RadDateTimePicker ID="tp_sys3_expire_prd_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
                                                         <td><telerik:RadDateTimePicker ID="tp_sys4_expire_prd" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
                                                         <td><telerik:RadDateTimePicker ID="tp_sys4_expire_prd_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
-                                                        <td></td>
-                                                        <td></td>
+                                                        <td><telerik:RadDateTimePicker ID="tp_lid_expire_prd" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
+                                                        <td><telerik:RadDateTimePicker ID="tp_lid_expire_prd_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -947,8 +947,8 @@
                                                         <td><asp:TextBox ID="txt_sys3_sap_code_qa_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
                                                         <td><asp:TextBox ID="txt_sys4_sap_code_qa" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
                                                         <td><asp:TextBox ID="txt_sys4_sap_code_qa_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
-                                                        <td></td>
-                                                        <td></td>
+                                                        <td><asp:TextBox ID="txt_lid_sap_code_qa" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
+                                                        <td><asp:TextBox ID="txt_lid_sap_code_qa_h2" runat="server" class="form-control" placeholder="자동생성" ReadOnly="True" /></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Expire Time</th>
@@ -960,8 +960,8 @@
                                                         <td><telerik:RadDateTimePicker ID="tp_sys3_expire_time_qa_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
                                                         <td><telerik:RadDateTimePicker ID="tp_sys4_expire_time_qa" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
                                                         <td><telerik:RadDateTimePicker ID="tp_sys4_expire_time_qa_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
-                                                        <td></td>
-                                                        <td></td>
+                                                        <td><telerik:RadDateTimePicker ID="tp_lid_expire_time_qa" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
+                                                        <td><telerik:RadDateTimePicker ID="tp_lid_expire_time_qa_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
