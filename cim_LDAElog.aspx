@@ -353,13 +353,15 @@
                                                         </td>
                                                         <td>
                                                             <asp:TextBox ID="txt_lid_batch_prd" runat="server" class="form-control"
-                                                                Style="text-transform: uppercase;"
+                                                                Style="width:65%;display:inline-block;text-transform:uppercase;"
                                                                 AutoPostBack="True" OnTextChanged="txt_lid_batch_prd_TextChanged" />
+                                                            <asp:Button class="btn btn-add btn-xs btn-inverse" ID="btn_lid_na_prd" runat="server" Width="30%" Text="N/A" OnClick="btn_lid_na_prd_Click" />
                                                         </td>
                                                         <td>
                                                             <asp:TextBox ID="txt_lid_batch_prd_h2" runat="server" class="form-control"
-                                                                Style="text-transform: uppercase;"
+                                                                Style="width:65%;display:inline-block;text-transform:uppercase;"
                                                                 AutoPostBack="True" OnTextChanged="txt_lid_batch_prd_h2_TextChanged" />
+                                                            <asp:Button class="btn btn-add btn-xs btn-inverse" ID="btn_lid_na_prd_h2" runat="server" Width="30%" Text="N/A" OnClick="btn_lid_na_prd_h2_Click" />
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -931,10 +933,12 @@
                                                             <asp:Button class="btn btn-add btn-xs btn-inverse" ID="btn_sys4_na_qa_h2" runat="server" Width="30%" Text="N/A" OnClick="btn_sys4_na_qa_h2_Click" />
                                                         </td>
                                                         <td>
-                                                            <asp:TextBox ID="txt_lid_batch_no_qa" runat="server" class="form-control" Style="text-transform: uppercase;" AutoPostBack="True" OnTextChanged="txt_lid_batch_no_qa_TextChanged" />
+                                                            <asp:TextBox ID="txt_lid_batch_no_qa" runat="server" class="form-control" Style="width:65%;display:inline-block;text-transform:uppercase;" AutoPostBack="True" OnTextChanged="txt_lid_batch_no_qa_TextChanged" />
+                                                            <asp:Button class="btn btn-add btn-xs btn-inverse" ID="btn_lid_na_qa" runat="server" Width="30%" Text="N/A" OnClick="btn_lid_na_qa_Click" />
                                                         </td>
                                                         <td>
-                                                            <asp:TextBox ID="txt_lid_batch_no_qa_h2" runat="server" class="form-control" Style="text-transform: uppercase;" AutoPostBack="True" OnTextChanged="txt_lid_batch_no_qa_h2_TextChanged" />
+                                                            <asp:TextBox ID="txt_lid_batch_no_qa_h2" runat="server" class="form-control" Style="width:65%;display:inline-block;text-transform:uppercase;" AutoPostBack="True" OnTextChanged="txt_lid_batch_no_qa_h2_TextChanged" />
+                                                            <asp:Button class="btn btn-add btn-xs btn-inverse" ID="btn_lid_na_qa_h2" runat="server" Width="30%" Text="N/A" OnClick="btn_lid_na_qa_h2_Click" />
                                                         </td>
                                                     </tr>
                                                     <tr>

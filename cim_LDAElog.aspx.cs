@@ -571,6 +571,8 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
         LookupLidBatchNo_Prd(txt_lid_batch_prd, txt_lid_info_prd, txt_lid_sap_prd);
     }
 
+    protected void btn_lid_na_prd_Click(object sender, EventArgs e) { txt_lid_batch_prd.Text = "N/A"; txt_lid_info_prd.Text = txt_lid_sap_prd.Text = string.Empty; }
+
     #region PRD Head2 (장비 1대당 Head 2개 대응)
 
     protected void txt_sys1_batch_prd_h2_TextChanged(object sender, EventArgs e)
@@ -606,6 +608,8 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
     {
         LookupLidBatchNo_Prd(txt_lid_batch_prd_h2, txt_lid_info_prd_h2, txt_lid_sap_prd_h2);
     }
+
+    protected void btn_lid_na_prd_h2_Click(object sender, EventArgs e) { txt_lid_batch_prd_h2.Text = "N/A"; txt_lid_info_prd_h2.Text = txt_lid_sap_prd_h2.Text = string.Empty; }
 
     #endregion
 
@@ -1011,6 +1015,8 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
         LookupLidBatchNo_Qa(txt_lid_batch_no_qa, txt_lid_information_qa, txt_lid_sap_code_qa);
     }
 
+    protected void btn_lid_na_qa_Click(object sender, EventArgs e) { txt_lid_batch_no_qa.Text = "N/A"; txt_lid_information_qa.Text = txt_lid_sap_code_qa.Text = string.Empty; }
+
     #region QA Head2 (장비 1대당 Head 2개 대응)
 
     protected void txt_sys1_batch_no_qa_h2_TextChanged(object sender, EventArgs e)
@@ -1046,6 +1052,8 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
     {
         LookupLidBatchNo_Qa(txt_lid_batch_no_qa_h2, txt_lid_information_qa_h2, txt_lid_sap_code_qa_h2);
     }
+
+    protected void btn_lid_na_qa_h2_Click(object sender, EventArgs e) { txt_lid_batch_no_qa_h2.Text = "N/A"; txt_lid_information_qa_h2.Text = txt_lid_sap_code_qa_h2.Text = string.Empty; }
 
     #endregion
 
