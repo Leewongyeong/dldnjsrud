@@ -387,8 +387,8 @@
                                                         <td><telerik:RadDateTimePicker ID="tp_sys3_expire_prd_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
                                                         <td><telerik:RadDateTimePicker ID="tp_sys4_expire_prd" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
                                                         <td><telerik:RadDateTimePicker ID="tp_sys4_expire_prd_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
-                                                        <td><telerik:RadDateTimePicker ID="tp_lid_expire_prd" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
-                                                        <td><telerik:RadDateTimePicker ID="tp_lid_expire_prd_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
+                                                        <td></td>
+                                                        <td></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -964,8 +964,8 @@
                                                         <td><telerik:RadDateTimePicker ID="tp_sys3_expire_time_qa_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
                                                         <td><telerik:RadDateTimePicker ID="tp_sys4_expire_time_qa" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
                                                         <td><telerik:RadDateTimePicker ID="tp_sys4_expire_time_qa_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
-                                                        <td><telerik:RadDateTimePicker ID="tp_lid_expire_time_qa" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
-                                                        <td><telerik:RadDateTimePicker ID="tp_lid_expire_time_qa_h2" runat="server" TodayButtonVisibility="Visible" class="form-control" DateInput-DateFormat="yyyy-MM-dd HH:mm:ss" Style="width: 100%" /></td>
+                                                        <td></td>
+                                                        <td></td>
                                                     </tr>
                                                 </tbody>
                                             </table>

@@ -199,9 +199,7 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                 AddGridColumn("SYS5_INFO_2", "Lid Info (Head2)");
                 AddGridColumn("SYS5_BATCH_NO_2", "Lid Batch No (Head2)");
                 AddGridColumn("SYS5_SAP_CODE", "Lid SAP Code (Head1)");
-                AddGridColumn("SYS5_EXPIRE_TIME", "Lid Expire Time (Head1)");
                 AddGridColumn("SYS5_SAP_CODE_2", "Lid SAP Code (Head2)");
-                AddGridColumn("SYS5_EXPIRE_TIME_2", "Lid Expire Time (Head2)");
                 AddGridColumn("QA_SYS1_PATTERN", "TIM Pattern");
                 AddGridColumn("QA_SYS2_PATTERN", "Glue Pattern");
                 AddGridColumn("QA_DUMMY_COVERAGE", "Dummy Coverage");
@@ -256,9 +254,7 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                 AddGridColumn("SYS5_INFO_2", "Lid Info (Head2)");
                 AddGridColumn("SYS5_BATCH_NO_2", "Lid Batch No (Head2)");
                 AddGridColumn("SYS5_SAP_CODE", "Lid SAP Code (Head1)");
-                AddGridColumn("SYS5_EXPIRE_TIME", "Lid Expire Time (Head1)");
                 AddGridColumn("SYS5_SAP_CODE_2", "Lid SAP Code (Head2)");
-                AddGridColumn("SYS5_EXPIRE_TIME_2", "Lid Expire Time (Head2)");
                 AddGridColumn("SYS1_NEEDLE_SN", "TIM Needle S/N");
                 AddGridColumn("SYS1_NEEDLE_SIZE", "TIM Needle Size");
                 AddGridColumn("SYS2_NEEDLE_SN", "Glue Needle S/N");
@@ -403,7 +399,6 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
             tp_sys2_expire_prd.SelectedDate = null;
             tp_sys3_expire_prd.SelectedDate = null;
             tp_sys4_expire_prd.SelectedDate = null;
-            tp_lid_expire_prd.SelectedDate = null;
 
             // Head2
             txt_sys1_info_prd_h2.Text = txt_sys2_info_prd_h2.Text = txt_sys3_info_prd_h2.Text = txt_sys4_info_prd_h2.Text = txt_lid_info_prd_h2.Text = string.Empty;
@@ -413,7 +408,6 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
             tp_sys2_expire_prd_h2.SelectedDate = null;
             tp_sys3_expire_prd_h2.SelectedDate = null;
             tp_sys4_expire_prd_h2.SelectedDate = null;
-            tp_lid_expire_prd_h2.SelectedDate = null;
         }
     }
 
@@ -637,8 +631,8 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                     "  SYS3_INFO_2, SYS3_BATCH_NO_2, SYS3_SAP_CODE_2, SYS3_EXPIRE_TIME_2," +
                     "  SYS4_INFO, SYS4_BATCH_NO, SYS4_SAP_CODE, SYS4_EXPIRE_TIME," +
                     "  SYS4_INFO_2, SYS4_BATCH_NO_2, SYS4_SAP_CODE_2, SYS4_EXPIRE_TIME_2," +
-                    "  SYS5_INFO, SYS5_BATCH_NO, SYS5_SAP_CODE, SYS5_EXPIRE_TIME," +
-                    "  SYS5_INFO_2, SYS5_BATCH_NO_2, SYS5_SAP_CODE_2, SYS5_EXPIRE_TIME_2," +
+                    "  SYS5_INFO, SYS5_BATCH_NO, SYS5_SAP_CODE," +
+                    "  SYS5_INFO_2, SYS5_BATCH_NO_2, SYS5_SAP_CODE_2," +
                     "  SYS1_NEEDLE_SN, SYS1_NEEDLE_SIZE, SYS2_NEEDLE_SN, SYS2_NEEDLE_SIZE," +
                     "  SYS1_DISPENSING_PATTERN, SYS2_DISPENSING_PATTERN, COVERAGE_DETACH, TILT_PROD, POSITION_PROD," +
                     "  REMARK, CREATED_TIME)" +
@@ -654,8 +648,8 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                     "  :SYS3_INFO_2, :SYS3_BATCH_NO_2, :SYS3_SAP_CODE_2, :SYS3_EXPIRE_TIME_2," +
                     "  :SYS4_INFO, :SYS4_BATCH_NO, :SYS4_SAP_CODE, :SYS4_EXPIRE_TIME," +
                     "  :SYS4_INFO_2, :SYS4_BATCH_NO_2, :SYS4_SAP_CODE_2, :SYS4_EXPIRE_TIME_2," +
-                    "  :SYS5_INFO, :SYS5_BATCH_NO, :SYS5_SAP_CODE, :SYS5_EXPIRE_TIME," +
-                    "  :SYS5_INFO_2, :SYS5_BATCH_NO_2, :SYS5_SAP_CODE_2, :SYS5_EXPIRE_TIME_2," +
+                    "  :SYS5_INFO, :SYS5_BATCH_NO, :SYS5_SAP_CODE," +
+                    "  :SYS5_INFO_2, :SYS5_BATCH_NO_2, :SYS5_SAP_CODE_2," +
                     "  :SYS1_NEEDLE_SN, :SYS1_NEEDLE_SIZE, :SYS2_NEEDLE_SN, :SYS2_NEEDLE_SIZE," +
                     "  :SYS1_DISPENSING_PATTERN, :SYS2_DISPENSING_PATTERN, :COVERAGE_DETACH, :TILT_PROD, :POSITION_PROD," +
                     "  :REMARK, sysdate)";
@@ -716,11 +710,9 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                 oraObj.AddParameter(new OracleParameter("SYS5_INFO", txt_lid_info_prd.Text));
                 oraObj.AddParameter(new OracleParameter("SYS5_BATCH_NO", txt_lid_batch_prd.Text));
                 oraObj.AddParameter(new OracleParameter("SYS5_SAP_CODE", txt_lid_sap_prd.Text));
-                oraObj.AddParameter(new OracleParameter("SYS5_EXPIRE_TIME", tp_lid_expire_prd.DateInput.DisplayText));
                 oraObj.AddParameter(new OracleParameter("SYS5_INFO_2", txt_lid_info_prd_h2.Text));
                 oraObj.AddParameter(new OracleParameter("SYS5_BATCH_NO_2", txt_lid_batch_prd_h2.Text));
                 oraObj.AddParameter(new OracleParameter("SYS5_SAP_CODE_2", txt_lid_sap_prd_h2.Text));
-                oraObj.AddParameter(new OracleParameter("SYS5_EXPIRE_TIME_2", tp_lid_expire_prd_h2.DateInput.DisplayText));
                 // Needle (Set-Up only)
                 oraObj.AddParameter(new OracleParameter("SYS1_NEEDLE_SN", isSetUp ? txt_tim_needle_sn_prd.Text : string.Empty));
                 oraObj.AddParameter(new OracleParameter("SYS1_NEEDLE_SIZE", isSetUp ? txt_tim_needle_size_prd.Text : string.Empty));
@@ -870,7 +862,6 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
             tp_sys2_expire_time_qa.DateInput.DisplayText = string.Empty;
             tp_sys3_expire_time_qa.DateInput.DisplayText = string.Empty;
             tp_sys4_expire_time_qa.DateInput.DisplayText = string.Empty;
-            tp_lid_expire_time_qa.DateInput.DisplayText = string.Empty;
 
             // Head2
             txt_sys1_information_qa_h2.Text = txt_sys2_information_qa_h2.Text = txt_sys3_information_qa_h2.Text = txt_sys4_information_qa_h2.Text = txt_lid_information_qa_h2.Text = string.Empty;
@@ -880,7 +871,6 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
             tp_sys2_expire_time_qa_h2.DateInput.DisplayText = string.Empty;
             tp_sys3_expire_time_qa_h2.DateInput.DisplayText = string.Empty;
             tp_sys4_expire_time_qa_h2.DateInput.DisplayText = string.Empty;
-            tp_lid_expire_time_qa_h2.DateInput.DisplayText = string.Empty;
         }
     }
 
@@ -1081,8 +1071,8 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                     "  SYS3_INFO_2, SYS3_BATCH_NO_2, SYS3_SAP_CODE_2, SYS3_EXPIRE_TIME_2," +
                     "  SYS4_INFO, SYS4_BATCH_NO, SYS4_SAP_CODE, SYS4_EXPIRE_TIME," +
                     "  SYS4_INFO_2, SYS4_BATCH_NO_2, SYS4_SAP_CODE_2, SYS4_EXPIRE_TIME_2," +
-                    "  SYS5_INFO, SYS5_BATCH_NO, SYS5_SAP_CODE, SYS5_EXPIRE_TIME," +
-                    "  SYS5_INFO_2, SYS5_BATCH_NO_2, SYS5_SAP_CODE_2, SYS5_EXPIRE_TIME_2," +
+                    "  SYS5_INFO, SYS5_BATCH_NO, SYS5_SAP_CODE," +
+                    "  SYS5_INFO_2, SYS5_BATCH_NO_2, SYS5_SAP_CODE_2," +
                     "  QA_SYS1_PATTERN, QA_SYS2_PATTERN, QA_DUMMY_COVERAGE, QA_DUMMY_COVERAGE_TYPE," +
                     "  QA_STRIP_NO, QA_VISUAL, QA_VISUAL_TYPE," +
                     "  BUY_OFF_RESULT, REMARK, CREATED_TIME)" +
@@ -1098,8 +1088,8 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                     "  :SYS3_INFO_2, :SYS3_BATCH_NO_2, :SYS3_SAP_CODE_2, :SYS3_EXPIRE_TIME_2," +
                     "  :SYS4_INFO, :SYS4_BATCH_NO, :SYS4_SAP_CODE, :SYS4_EXPIRE_TIME," +
                     "  :SYS4_INFO_2, :SYS4_BATCH_NO_2, :SYS4_SAP_CODE_2, :SYS4_EXPIRE_TIME_2," +
-                    "  :SYS5_INFO, :SYS5_BATCH_NO, :SYS5_SAP_CODE, :SYS5_EXPIRE_TIME," +
-                    "  :SYS5_INFO_2, :SYS5_BATCH_NO_2, :SYS5_SAP_CODE_2, :SYS5_EXPIRE_TIME_2," +
+                    "  :SYS5_INFO, :SYS5_BATCH_NO, :SYS5_SAP_CODE," +
+                    "  :SYS5_INFO_2, :SYS5_BATCH_NO_2, :SYS5_SAP_CODE_2," +
                     "  :QA_SYS1_PATTERN, :QA_SYS2_PATTERN, :QA_DUMMY_COVERAGE, :QA_DUMMY_COVERAGE_TYPE," +
                     "  :QA_STRIP_NO, :QA_VISUAL, :QA_VISUAL_TYPE," +
                     "  :BUY_OFF_RESULT, :REMARK, sysdate)";
@@ -1159,11 +1149,9 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
                 oraObj.AddParameter(new OracleParameter("SYS5_INFO", isSetUp ? txt_lid_information_qa.Text : string.Empty));
                 oraObj.AddParameter(new OracleParameter("SYS5_BATCH_NO", isSetUp ? txt_lid_batch_no_qa.Text : string.Empty));
                 oraObj.AddParameter(new OracleParameter("SYS5_SAP_CODE", isSetUp ? txt_lid_sap_code_qa.Text : string.Empty));
-                oraObj.AddParameter(new OracleParameter("SYS5_EXPIRE_TIME", isSetUp ? tp_lid_expire_time_qa.DateInput.DisplayText : string.Empty));
                 oraObj.AddParameter(new OracleParameter("SYS5_INFO_2", isSetUp ? txt_lid_information_qa_h2.Text : string.Empty));
                 oraObj.AddParameter(new OracleParameter("SYS5_BATCH_NO_2", isSetUp ? txt_lid_batch_no_qa_h2.Text : string.Empty));
                 oraObj.AddParameter(new OracleParameter("SYS5_SAP_CODE_2", isSetUp ? txt_lid_sap_code_qa_h2.Text : string.Empty));
-                oraObj.AddParameter(new OracleParameter("SYS5_EXPIRE_TIME_2", isSetUp ? tp_lid_expire_time_qa_h2.DateInput.DisplayText : string.Empty));
                 // Pattern / Measure
                 oraObj.AddParameter(new OracleParameter("QA_SYS1_PATTERN", isSetUp ? ddl_tim_pattern_setup_qa.SelectedItem.Text : ddl_tim_pattern_vm_qa.SelectedItem.Text));
                 oraObj.AddParameter(new OracleParameter("QA_SYS2_PATTERN", isSetUp ? ddl_glue_pattern_setup_qa.SelectedItem.Text : ddl_glue_pattern_vm_qa.SelectedItem.Text));
@@ -1295,12 +1283,12 @@ public partial class sources_soc_cim_prod_assembly_cim_LDAElog : BasePage
         "  SYS1_NEEDLE_SIZE, SYS2_NEEDLE_SN, SYS2_NEEDLE_SIZE, PICKUP_TOOL, PCB_REVERSE_DETECT_CHECK, BONDING_FORCE," +
         "  DELAY_TIME, PCB_MAGAZINE_LOAD_UNLOAD_CHECK, MODE_2DID, SYS1_INFO, SYS1_BATCH_NO, SYS1_SAP_CODE," +
         "  SYS1_EXPIRE_TIME, SYS3_INFO, SYS3_BATCH_NO, SYS3_SAP_CODE, SYS3_EXPIRE_TIME, SYS4_INFO," +
-        "  SYS4_BATCH_NO, SYS4_SAP_CODE, SYS4_EXPIRE_TIME, SYS5_INFO, SYS5_SAP_CODE, SYS5_EXPIRE_TIME, QA_SYS1_PATTERN, QA_SYS2_PATTERN," +
+        "  SYS4_BATCH_NO, SYS4_SAP_CODE, SYS4_EXPIRE_TIME, SYS5_INFO, SYS5_SAP_CODE, QA_SYS1_PATTERN, QA_SYS2_PATTERN," +
         "  QA_DUMMY_COVERAGE, QA_DUMMY_COVERAGE_TYPE, QA_STRIP_NO, QA_VISUAL, QA_VISUAL_TYPE, BUY_OFF_RESULT," +
         "  REMARK, CREATED_TIME, PCB_BACK_SIDE_SCRATCH_CHECK, PUSHER_POSITION_CHECK, SYS1_INFO_2, SYS1_BATCH_NO_2," +
         "  SYS1_SAP_CODE_2, SYS1_EXPIRE_TIME_2, SYS2_INFO_2, SYS2_BATCH_NO_2, SYS2_SAP_CODE_2, SYS2_EXPIRE_TIME_2," +
         "  SYS3_INFO_2, SYS3_BATCH_NO_2, SYS3_SAP_CODE_2, SYS3_EXPIRE_TIME_2, SYS4_INFO_2, SYS4_BATCH_NO_2," +
-        "  SYS4_SAP_CODE_2, SYS4_EXPIRE_TIME_2, SYS5_INFO_2, SYS5_BATCH_NO_2, SYS5_SAP_CODE_2, SYS5_EXPIRE_TIME_2";
+        "  SYS4_SAP_CODE_2, SYS4_EXPIRE_TIME_2, SYS5_INFO_2, SYS5_BATCH_NO_2, SYS5_SAP_CODE_2";
 
     public static DataTable LDAElog_Open_Data(DateTime? date_fr, DateTime? date_to,
         string lot_id, string mc_no, string userID, string recipe_name,
